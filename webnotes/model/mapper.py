@@ -30,10 +30,10 @@ def get_mapped_doclist(from_doctype, from_docname, table_maps, target_doclist=[]
 	if isinstance(target_doclist, basestring):
 		target_doclist = json.loads(target_doclist)
 	
-	if not webnotes.has_permission(from_doctype, from_docname):
-		webnotes.msgprint("No Permission", raise_exception=webnotes.PermissionError)
-
 	source = webnotes.bean(from_doctype, from_docname)
+
+	if not webnotes.has_permission(from_doctype, doc=source.doc):
+		webnotes.msgprint("No Permission", raise_exception=webnotes.PermissionError)
 
 	source_meta = webnotes.get_doctype(from_doctype)
 	target_meta = webnotes.get_doctype(table_maps[from_doctype]["doctype"])
@@ -49,28 +49,29 @@ def get_mapped_doclist(from_doctype, from_docname, table_maps, target_doclist=[]
 
 	# children
 	for source_d in source.doclist[1:]:
-		table_map = table_maps[source_d.doctype]
-		if "condition" in table_map:
-			if not table_map["condition"](source_d):
-				continue
-		target_doctype = table_map["doctype"]
-		parentfield = target_meta.get({
-				"parent": target_doc.doctype, 
-				"doctype": "DocField",
-				"fieldtype": "Table", 
-				"options": target_doctype
-			})[0].fieldname
+		table_map = table_maps.get(source_d.doctype)
+		if table_map:
+			if "condition" in table_map:
+				if not table_map["condition"](source_d):
+					continue
+			target_doctype = table_map["doctype"]
+			parentfield = target_meta.get({
+					"parent": target_doc.doctype, 
+					"doctype": "DocField",
+					"fieldtype": "Table", 
+					"options": target_doctype
+				})[0].fieldname
 		
-		target_d = webnotes.new_doc(target_doctype, target_doc, parentfield)
-		map_doc(source_d, target_d, table_map, source_meta, target_meta)
-		doclist.append(target_d)
+			target_d = webnotes.new_doc(target_doctype, target_doc, parentfield)
+			map_doc(source_d, target_d, table_map, source_meta, target_meta, source.doclist[0])
+			doclist.append(target_d)
 	
 	if postprocess:
 		postprocess(source, doclist)
 	
 	return doclist
 
-def map_doc(source_doc, target_doc, table_map, source_meta, target_meta):
+def map_doc(source_doc, target_doc, table_map, source_meta, target_meta, source_parent=None):
 	no_copy_fields = set(\
 		  [d.fieldname for d in source_meta.get({"no_copy": 1, 
 			"parent": source_doc.doctype})] \
@@ -105,4 +106,4 @@ def map_doc(source_doc, target_doc, table_map, source_meta, target_meta):
 		target_doc.idx = source_doc.idx
 		
 	if "postprocess" in table_map:
-		table_map["postprocess"](source_doc, target_doc)
+		table_map["postprocess"](source_doc, target_doc, source_parent)

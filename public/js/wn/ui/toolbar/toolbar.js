@@ -197,9 +197,10 @@ wn.ui.toolbar.update_notifications = function() {
 			$(repl('<li><a>\
 				<span class="badge pull-right">\
 					%(count)s</span> \
-				%(module)s </a></li>', {
+				<i class="icon-fixed-width %(icon)s"></i> %(module)s </a></li>', {
 					module: module,
-					count: count
+					count: count,
+					icon: wn.modules[module].icon
 				}))
 				.appendTo("#navbar-notification")
 					.find("a")
@@ -222,8 +223,9 @@ wn.ui.toolbar.update_notifications = function() {
 			$(repl('<li><a>\
 				<span class="badge pull-right">\
 					%(count)s</span> \
-				%(doctype)s </a></li>', {
+				<i class="icon-fixed-width %(icon)s"></i> %(doctype)s </a></li>', {
 					doctype: doctype,
+					icon: wn.boot.doctype_icons[doctype],
 					count: count
 				}))
 				.appendTo("#navbar-notification")
