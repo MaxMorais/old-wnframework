@@ -315,11 +315,18 @@ wn.ui.form.ControlPassword = wn.ui.form.ControlData.extend({
 
 wn.ui.form.ControlInt = wn.ui.form.ControlData.extend({
 	make_input: function() {
+		var me = this;
 		this._super();
 		this.$input
 			.css({"text-align": "right"})
 			.on("focus", function() {
-				setTimeout(function() { document.activeElement.select() }, 100);
+				setTimeout(function() { 
+					if(!document.activeElement) return;
+					me.validate(document.activeElement.value, function(val) {
+						document.activeElement.value = val;
+					});
+					document.activeElement.select() 
+				}, 100);
 				return false;
 			})
 	},
@@ -648,7 +655,7 @@ wn.ui.form.ControlLink = wn.ui.form.ControlData.extend({
 			source: function(request, response) {
 				var args = {
 					'txt': request.term, 
-					'dt': me.df.options,
+					'doctype': me.df.options,
 				};
 
 				me.set_custom_query(args);

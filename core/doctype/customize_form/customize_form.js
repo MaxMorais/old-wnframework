@@ -20,6 +20,12 @@
 // OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // 
 
+$(cur_frm.wrapper).on("grid-row-render", function(e, grid_row) {
+	if(grid_row.doc && grid_row.doc.fieldtype=="Section Break") {
+		$(grid_row.row).css({"font-weight": "bold"});
+	}
+})
+
 cur_frm.cscript.doc_type = function(doc, dt, dn) {
 	cur_frm.call({
 		method: "get",
@@ -36,13 +42,14 @@ cur_frm.cscript.onload = function(doc, dt, dn) {
 }
 
 cur_frm.fields_dict.doc_type.get_query = function(doc, dt, dn) {
-	return 'SELECT name FROM `tabDocType` \
-	WHERE ((IFNULL(issingle,0)=0 AND \
-	IFNULL(in_create, 0)=0 AND \
-	name not in ("DocType", "DocField", "DocPerm", "Profile", "Role", "UserRole", "Page", \
-		"Page Role", "Module Def", "Print Format", "Report")) \
-	or name = "Item Group") \
-	AND name LIKE "%s%%" ORDER BY name ASC LIMIT 50';
+	return{
+		filters:[
+			['DocType', 'issingle', '=', 0],
+			['DocType', 'in_create', '=', 0],
+			['DocType', 'name', 'not in', 'DocType, DocField, DocPerm, Profile, Role, UserRole,\
+				 Page, Page Role, Module Def, Print Format, Report']
+		]
+	}
 }
 
 cur_frm.cscript.refresh = function(doc, dt, dn) {
@@ -86,6 +93,11 @@ cur_frm.cscript.refresh = function(doc, dt, dn) {
 	}
 
 	cur_frm.cscript.hide_allow_attach(doc, dt, dn);
+	
+	if(wn.route_options) {
+		wn.model.set_value("Customize Form", null, "doc_type", wn.route_options.doctype)
+		wn.route_options = null;
+	}
 }
 
 cur_frm.cscript.hide_allow_attach = function(doc, dt, dn) {

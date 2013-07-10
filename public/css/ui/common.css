@@ -395,6 +395,10 @@ textarea[data-fieldtype="Small Text"] {
 	cursor: pointer;
 }
 
+.grid-row .panel {
+	background-color: #fffff8;
+}
+
 /* form footer */
 
 .form-footer {
@@ -435,6 +439,15 @@ textarea[data-fieldtype="Small Text"] {
 }
 
 /* buttons */
+
+.input-group-btn > .btn {
+  float: none;
+}
+
+.input-group-btn > .btn:first-child {
+  margin-right: -3px;
+}
+
 .btn-default {
   color: #ffffff;
   background-color: #a7a9aa;

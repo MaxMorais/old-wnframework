@@ -30,7 +30,7 @@ Group actions like save, etc are performed on doclists
 
 import webnotes
 from webnotes import _, msgprint
-from webnotes.utils import cint, cstr
+from webnotes.utils import cint, cstr, flt
 from webnotes.model.doc import Document
 
 class DocstatusTransitionError(webnotes.ValidationError): pass
@@ -68,7 +68,7 @@ class Bean:
 		if not dn: dn = self.doc.name
 
 		doc = Document(dt, dn, prefix=prefix)
-
+		
 		# get all children types
 		tablefields = webnotes.model.meta.get_table_fields(dt)
 
@@ -78,9 +78,18 @@ class Bean:
 			doclist += getchildren(doc.name, t[0], t[1], dt, prefix=prefix)
 
 		self.set_doclist(doclist)
+		
+		if dt == dn:
+			self.convert_type(self.doc)
 
 	def __iter__(self):
 		return self.doclist.__iter__()
+
+	@property
+	def meta(self):
+		if not hasattr(self, "_meta"):
+			self._meta = webnotes.get_doctype(self.doc.doctype)
+		return self._meta
 
 	def from_compressed(self, data, docname):
 		from webnotes.model.utils import expand
@@ -206,8 +215,15 @@ class Bean:
 		idx_map = {}
 		is_local = cint(self.doc.fields.get("__islocal"))
 		
+		if not webnotes.in_import:
+			parentfields = [d.fieldname for d in self.meta.get({"doctype": "DocField", "fieldtype": "Table"})]
+			
 		for i, d in enumerate(self.doclist[1:]):
 			if d.parentfield:
+				if not webnotes.in_import:
+					if not d.parentfield in parentfields:
+						webnotes.msgprint("Bad parentfield %s" % d.parentfield, 
+							raise_exception=True)
 				d.parenttype = self.doc.doctype
 				d.parent = self.doc.name
 			if not d.idx:
@@ -277,7 +293,7 @@ class Bean:
 		self.doc.fields["__islocal"] = 1
 		
 		if webnotes.in_test:
-			if webnotes.get_doctype(self.doc.doctype).get_field("naming_series"):
+			if self.meta.get_field("naming_series"):
 				self.doc.naming_series = "_T-" + self.doc.doctype + "-"
 		
 		return self.save()
@@ -358,29 +374,38 @@ class Bean:
 		
 	def check_mandatory(self):
 		missing = []
-		from webnotes.model.meta import get_mandatory_fields
 		for doc in self.doclist:
-			for fieldname, label, fieldtype in get_mandatory_fields(doc.doctype):
-				msg = ""
-				if fieldtype == "Table":
-					if not self.doclist.get({"parentfield": fieldname}):
-						msg = _("Error") + ": " + _("Data missing in table") + ": " + _(label)
+			for df in self.meta:
+				if df.doctype=="DocField" and df.reqd and df.parent==doc.doctype:
+					msg = ""
+					if df.fieldtype == "Table":
+						if not self.doclist.get({"parentfield": df.fieldname}):
+							msg = _("Error") + ": " + _("Data missing in table") + ": " + _(df.label)
 				
-				elif doc.fields.get(fieldname) is None:
-					msg = _("Error") + ": "
-					if doc.parentfield:
-						msg += _("Row") + (" # %d: " % doc.idx)
+					elif doc.fields.get(df.fieldname) is None:
+						msg = _("Error") + ": "
+						if doc.parentfield:
+							msg += _("Row") + (" # %d: " % doc.idx)
 			
-					msg += _("Value missing for") + ": " + _(label)
+						msg += _("Value missing for") + ": " + _(df.label)
 					
-				if msg:
-					missing.append([msg, fieldname])
+					if msg:
+						missing.append([msg, df.fieldname])
 		
-		if missing:		
+		if missing:
 			for msg, fieldname in missing:
 				msgprint(msg)
 
 			raise webnotes.MandatoryError, ", ".join([fieldname for msg, fieldname in missing])
+			
+	def convert_type(self, doc):
+		for df in self.meta.get({"doctype": "DocField", "parent": doc.doctype}):
+			if df.fieldtype in ("Int", "Check"):
+				doc.fields[df.fieldname] = cint(doc.fields.get(df.fieldname))
+			elif df.fieldtype in ("Float", "Currency"):
+				doc.fields[df.fieldname] = flt(doc.fields.get(df.fieldname))
+				
+		doc.docstatus = cint(doc.docstatus)
 					
 def clone(source_wrapper):
 	""" make a clone of a document"""

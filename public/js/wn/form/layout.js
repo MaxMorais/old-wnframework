@@ -79,8 +79,8 @@ wn.ui.form.Layout = Class.extend({
 				this.labelled_section_count++;
 				$('<h3 class="col col-lg-12">' 
 					+ (df.options ? (' <i class="text-muted '+df.options+'"></i> ') : "") 
-					+ this.labelled_section_count + ". " 
-					+ df.label 
+					+ '<span class="section-count-label">' + this.labelled_section_count + "</span>. " 
+					+ wn._(df.label)
 					+ "</h3>")
 					.css({
 						"font-weight": "bold",
@@ -96,6 +96,7 @@ wn.ui.form.Layout = Class.extend({
 				$('<div class="col col-lg-12 small text-muted">' + df.description + '</div>').appendTo(this.section);
 			}
 			if(df.label || df.description) {
+				// spacer
 				$('<div class="col col-lg-12"></div>')
 					.appendTo(this.section)
 					.css({"height": "20px"});
@@ -117,6 +118,11 @@ wn.ui.form.Layout = Class.extend({
 		}
 		return this.section;
 	},
+	refresh_section_count: function() {
+		this.wrapper.find(".section-count-label:visible").each(function(i) {
+			$(this).html(i+1);
+		});
+	},
 	setup_tabbing: function() {
 		var me = this;
 		this.wrapper.on("keydown", function(ev) {
@@ -125,14 +131,14 @@ wn.ui.form.Layout = Class.extend({
 					doctype = current.attr("data-doctype"),
 					fieldname = current.attr("data-fieldname");
 				if(doctype)
-					return me.handle_tab(doctype, fieldname);
+					return me.handle_tab(doctype, fieldname, ev.shiftKey);
 			}
 		})
 	},
-	handle_tab: function(doctype, fieldname) {
+	handle_tab: function(doctype, fieldname, shift) {
 		var me = this,
 			grid_row = null;
-			next = null,
+			prev = null,
 			fields = me.frm.fields,
 			in_grid = false;
 			
@@ -144,6 +150,14 @@ wn.ui.form.Layout = Class.extend({
 								
 		for(var i=0, len=fields.length; i < len; i++) {
 			if(fields[i].df.fieldname==fieldname) {
+				if(shift) {
+					if(prev) {
+						this.set_focus(prev)
+					} else {
+						$(cur_frm.wrapper).find(".btn-primary").focus();
+					}
+					break;
+				}
 				if(i==len-1) {
 					// last field in this group
 					if(grid_row) {
@@ -158,7 +172,7 @@ wn.ui.form.Layout = Class.extend({
 							grid_row.grid.grid_rows[grid_row.doc.idx].toggle_view(true);
 						}
 					} else {
-						// last field - to title buttons
+						$(cur_frm.wrapper).find(".btn-primary").focus();
 					}
 				} else {
 					me.focus_on_next_field(i, fields);
@@ -166,31 +180,34 @@ wn.ui.form.Layout = Class.extend({
 				
 				break;
 			}
+			if(fields[i].disp_status==="Write")
+				prev = fields[i];
 		}
 		return false;
 	},
 	focus_on_next_field: function(start_idx, fields) {
 		// loop to find next eligible fields
 		for(var ii= start_idx + 1, len = fields.length; ii < len; ii++) {
-			if(fields[ii].disp_status=="Write") {
-				var next = fields[ii];
-
-				// next is table, show the table
-				if(next.df.fieldtype=="Table") {
-					if(!next.grid.grid_rows.length) {
-						next.grid.add_new_row(1);
-					} else {
-						next.grid.grid_rows[0].toggle_view(true);
-					}
-				}
-				else if(next.editor) {
-					next.editor.set_focus();
-				}
-				else if(next.$input) {
-					next.$input.focus();
-				}
+			if(fields[ii].disp_status==="Write") {
+				this.set_focus(fields[ii]);
 				break;
 			}
+		}
+	},
+	set_focus: function(field) {
+		// next is table, show the table
+		if(field.df.fieldtype=="Table") {
+			if(!field.grid.grid_rows.length) {
+				field.grid.add_new_row(1);
+			} else {
+				field.grid.grid_rows[0].toggle_view(true);
+			}
+		}
+		else if(field.editor) {
+			field.editor.set_focus();
+		}
+		else if(field.$input) {
+			field.$input.focus();
 		}
 	},
 	get_open_grid_row: function() {
