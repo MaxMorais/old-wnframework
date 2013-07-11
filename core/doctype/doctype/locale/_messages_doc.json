@@ -7,6 +7,7 @@
  "<a onclick=\"msgprint('<ol>\\\n<li><b>field:[fieldname]</b> - By Field\\\n<li><b>naming_series:</b> - By Naming Series (field called naming_series must be present\\\n<li><b>eval:[expression]</b> - Evaluate an expression in python (self is doc)\\\n<li><b>Prompt</b> - Prompt user for a name\\\n<li><b>[series]</b> - Series by prefix (separated by a dot); for example PRE.#####\\\n</ol>')\">Naming Options</a>", 
  "Hide Copy", 
  "DocType Details", 
+ "Icon", 
  "Core", 
  "Max Attachments", 
  "Description", 

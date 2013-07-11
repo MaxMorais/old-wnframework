@@ -1,5 +1,7 @@
 {
  "Allow Attach": "Laat Bevestig", 
+ "Allow Import": "Laat importeren", 
+ "Allow Import via Data Import Tool": "Laat importeren via Gegevens importeren Tool", 
  "Allow Rename": "Laat hernoemen", 
  "Attachments": "Toebehoren", 
  "Auto Name": "Auto Naam", 
@@ -21,6 +23,7 @@
  "Hide Heading": "Verberg rubriek", 
  "Hide Print": "Verberg Afdrukken", 
  "Hide Toolbar": "Werkbalk verbergen", 
+ "Icon": "Pictogram", 
  "In Dialog": "In Dialog", 
  "Is Child Table": "Is het kind Tabel", 
  "Is Single": "Is Single", 

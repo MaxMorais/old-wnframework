@@ -1,4 +1,5 @@
 {
+ "Add Total Row": "Dodaj Ukupno Row", 
  "Core": "Sr\u017e", 
  "Disabled": "Onesposobljen", 
  "Is Standard": "Je Standardni", 
@@ -8,6 +9,9 @@
  "Query Report": "Izvje\u0161\u0107e upita", 
  "Ref DocType": "Ref. DOCTYPE", 
  "Report": "Prijavi", 
+ "Report Builder": "Report Builder", 
  "Report Name": "Naziv izvje\u0161\u0107a", 
+ "Report Type": "Prijavi Vid", 
+ "Script Report": "Skripta Prijavi", 
  "Yes": "Da"
 }

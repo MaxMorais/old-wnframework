@@ -3,10 +3,12 @@
  "Allow user to login only before this hour (0-24)": "Gebruiker mag alleen inloggen voordat dit uur (0-24)", 
  "Background Image": "Achtergrondafbeelding", 
  "Bio": "Bio", 
+ "Bio will be displayed in blog section etc.": "Bio wordt weergegeven in blog sectie enz.", 
  "Birth Date": "Geboortedatum", 
  "Check / Uncheck roles assigned to the Profile. Click on the Role to find out what permissions that Role has.": "Controleer / Deselecteer rollen toegewezen aan het profiel. Klik op de rol om uit te vinden welke permissies die taak.", 
  "Core": "Kern", 
  "Defaults": "Standaardwaarden", 
+ "Deutsch": "Deutsch", 
  "Display Settings": "Beeldscherminstellingen", 
  "Email": "E-mail", 
  "Email Host": "E-mail Host", 
@@ -49,6 +51,7 @@
  "Send Invite Email": "Uitnodiging verzenden E-mail", 
  "Set New Password": "Set Nieuw wachtwoord", 
  "Set a new password and \"Save\"": "Stel een nieuw wachtwoord in en &quot;Opslaan&quot;", 
+ "Short Bio": "Korte Bio", 
  "Sync Inbox": "Sync Inbox", 
  "System User": "Systeem", 
  "These values will be automatically updated in transactions and also will be useful to restrict permissions for this user on transactions containing these values.": "Deze waarden worden automatisch bijgewerkt in transacties en zal ook nuttig zijn om machtigingen voor deze gebruiker op de transacties die deze waarden te beperken.", 
@@ -60,5 +63,6 @@
  "fran\u00e7ais": "fran\u00e7ais", 
  "nederlands": "nederlands", 
  "portugu\u00eas": "portugu\u00eas", 
+ "portugu\u00eas brasileiro": "portugu\u00eas brasileiro", 
  "user_image_show": "user_image_show"
 }

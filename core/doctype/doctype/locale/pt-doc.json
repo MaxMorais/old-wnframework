@@ -1,5 +1,7 @@
 {
  "Allow Attach": "Permitir Anexar", 
+ "Allow Import": "Permitir a importa\u00e7\u00e3o", 
+ "Allow Import via Data Import Tool": "Permitir a importa\u00e7\u00e3o via ferramenta de importa\u00e7\u00e3o de dados", 
  "Allow Rename": "Permitir Renomear", 
  "Attachments": "Anexos", 
  "Auto Name": "Nome Auto", 
@@ -21,6 +23,7 @@
  "Hide Heading": "Ocultar t\u00edtulo", 
  "Hide Print": "Ocultar Imprimir", 
  "Hide Toolbar": "Ocultar barra de ferramentas", 
+ "Icon": "\u00cdcone", 
  "In Dialog": "Em di\u00e1logo", 
  "Is Child Table": "\u00c9 tabela filho", 
  "Is Single": "\u00c9 \u00fanico", 

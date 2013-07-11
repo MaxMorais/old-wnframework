@@ -1,5 +1,7 @@
 {
  "Allow Attach": "Laissez Fixez", 
+ "Allow Import": "Autoriser l&#39;importation", 
+ "Allow Import via Data Import Tool": "Autoriser l&#39;importation via l&#39;outil d&#39;importation de donn\u00e9es", 
  "Allow Rename": "Laissez Renommez", 
  "Attachments": "Pi\u00e8ces jointes", 
  "Auto Name": "Nom Auto", 
@@ -21,6 +23,7 @@
  "Hide Heading": "Masquer le Cap", 
  "Hide Print": "Masquer Imprimer", 
  "Hide Toolbar": "Masquer la barre", 
+ "Icon": "Ic\u00f4ne", 
  "In Dialog": "Dans la bo\u00eete de dialogue", 
  "Is Child Table": "Est-table enfant", 
  "Is Single": "Est c\u00e9libataire", 

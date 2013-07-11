@@ -1,5 +1,7 @@
 {
  "Allow Attach": "Permitir Adjuntar", 
+ "Allow Import": "Permitir la importaci\u00f3n", 
+ "Allow Import via Data Import Tool": "Permitir la importaci\u00f3n a trav\u00e9s de herramientas de importaci\u00f3n de datos", 
  "Allow Rename": "Permitir Renombre", 
  "Attachments": "Archivos adjuntos", 
  "Auto Name": "Nombre Auto", 
@@ -21,6 +23,7 @@
  "Hide Heading": "Ocultar Encabezado", 
  "Hide Print": "Ocultar Imprimir", 
  "Hide Toolbar": "Ocultar barra de herramientas", 
+ "Icon": "Icono", 
  "In Dialog": "En di\u00e1logo", 
  "Is Child Table": "Es tabla secundaria", 
  "Is Single": "Es el \u00fanico", 

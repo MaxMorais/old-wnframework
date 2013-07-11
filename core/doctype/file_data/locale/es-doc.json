@@ -1,6 +1,9 @@
 {
+ "Attached To DocType": "Se adjunta a DOCTYPE", 
+ "Attached To Name": "Atribuida al apellido", 
  "Core": "N\u00facleo", 
  "File Data": "Archivo de datos", 
  "File Name": "Nombre de archivo", 
+ "File Size": "Tama\u00f1o del archivo", 
  "File URL": "URL del archivo"
 }

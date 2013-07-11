@@ -3,10 +3,12 @@
  "Allow user to login only before this hour (0-24)": "Permitir que o usu\u00e1rio fazer o login antes s\u00f3 esta hora (0-24)", 
  "Background Image": "Imagem de Fundo", 
  "Bio": "Bio", 
+ "Bio will be displayed in blog section etc.": "Bio ser\u00e1 exibido na se\u00e7\u00e3o do blog, etc", 
  "Birth Date": "Data de Nascimento", 
  "Check / Uncheck roles assigned to the Profile. Click on the Role to find out what permissions that Role has.": "Verifique / Desmarque pap\u00e9is atribu\u00eddos ao perfil. Clique sobre o Papel para descobrir o que as permiss\u00f5es que papel tem.", 
  "Core": "N\u00facleo", 
  "Defaults": "Padr\u00f5es", 
+ "Deutsch": "Deutsch", 
  "Display Settings": "Configura\u00e7\u00f5es de exibi\u00e7\u00e3o", 
  "Email": "E-mail", 
  "Email Host": "Anfitri\u00e3o e-mail", 
@@ -49,6 +51,7 @@
  "Send Invite Email": "Enviar convite mail", 
  "Set New Password": "Definir nova senha", 
  "Set a new password and \"Save\"": "Definir uma nova senha e &quot;Save&quot;", 
+ "Short Bio": "Curta Bio", 
  "Sync Inbox": "Sincroniza\u00e7\u00e3o Caixa de Entrada", 
  "System User": "Usu\u00e1rio do Sistema", 
  "These values will be automatically updated in transactions and also will be useful to restrict permissions for this user on transactions containing these values.": "Esses valores ser\u00e3o atualizados automaticamente em transa\u00e7\u00f5es e tamb\u00e9m ser\u00e1 \u00fatil para restringir as permiss\u00f5es para este usu\u00e1rio em opera\u00e7\u00f5es que contenham esses valores.", 
@@ -60,5 +63,6 @@
  "fran\u00e7ais": "fran\u00e7ais", 
  "nederlands": "nederlands", 
  "portugu\u00eas": "portugu\u00eas", 
+ "portugu\u00eas brasileiro": "portugu\u00eas brasileiro", 
  "user_image_show": "user_image_show"
 }

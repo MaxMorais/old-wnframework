@@ -1,4 +1,5 @@
 {
+ "Add Total Row": "A\u00f1adir fila total", 
  "Core": "N\u00facleo", 
  "Disabled": "Discapacitado", 
  "Is Standard": "Es el est\u00e1ndar", 
@@ -8,6 +9,9 @@
  "Query Report": "Consulta de informe", 
  "Ref DocType": "Ref DocType", 
  "Report": "Informe", 
+ "Report Builder": "Generador de informes", 
  "Report Name": "Nombre del informe", 
+ "Report Type": "Tipo de informe", 
+ "Script Report": "Informe de secuencias de comandos", 
  "Yes": "S\u00ed"
 }

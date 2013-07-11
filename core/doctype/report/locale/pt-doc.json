@@ -1,4 +1,5 @@
 {
+ "Add Total Row": "Adicionar Linha de Total", 
  "Core": "N\u00facleo", 
  "Disabled": "Inv\u00e1lido", 
  "Is Standard": "\u00c9 Padr\u00e3o", 
@@ -8,6 +9,9 @@
  "Query Report": "Query Report", 
  "Ref DocType": "Ref DocType", 
  "Report": "Relat\u00f3rio", 
+ "Report Builder": "Report Builder", 
  "Report Name": "Nome do Relat\u00f3rio", 
+ "Report Type": "Tipo de relat\u00f3rio", 
+ "Script Report": "Relat\u00f3rio de Script", 
  "Yes": "Sim"
 }

@@ -6307,12 +6307,6 @@ span, div, td, input, textarea, button, select {
 	text-align: center;
 }
 
-/*extra size menus for recent*/
-.dropdown-menu#toolbar-recent, .dropdown-menu#toolbar-options, .dropdown-menu#toolbar-help{
-	min-width: 160px !important;
-	max-width: 260px !important;
-}
-
 .expiry-info {
 	margin-top: 40px;
 	margin-bottom: -40px;
@@ -6357,6 +6351,19 @@ img {
 	padding-bottom: 30px;
 }
 
+.outer {
+	padding: 0px 20px;
+}
+
+.navbar {
+	margin: 0px -20px;
+}
+
+.banner {
+	margin-top: 20px;
+	padding: 0px 20px;
+}
+
 .missing-image {
 	background-color: #eee;
 	padding: 40px;
@@ -6381,7 +6388,6 @@ img {
 }
 
 div.web-footer {
-	border-top: 1px solid #dddddd;
 	padding-top: 10px;
 }
 

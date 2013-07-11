@@ -3,10 +3,12 @@
  "Allow user to login only before this hour (0-24)": "Permettre \u00e0 l&#39;utilisateur de se connecter seulement avant cette heure (0-24)", 
  "Background Image": "Image de fond", 
  "Bio": "Bio", 
+ "Bio will be displayed in blog section etc.": "Bio sera affich\u00e9 dans la section de blog, etc", 
  "Birth Date": "Date de naissance", 
  "Check / Uncheck roles assigned to the Profile. Click on the Role to find out what permissions that Role has.": "V\u00e9rifiez / D\u00e9cochez les r\u00f4les assign\u00e9s au profil. Cliquez sur le R\u00f4le de savoir ce que ce r\u00f4le a des autorisations.", 
  "Core": "C\u0153ur", 
  "Defaults": "Par d\u00e9faut", 
+ "Deutsch": "Deutsch", 
  "Display Settings": "Param\u00e8tres d&#39;affichage", 
  "Email": "Email", 
  "Email Host": "H\u00f4te Email", 
@@ -49,6 +51,7 @@
  "Send Invite Email": "Envoyer une invitation e-mail", 
  "Set New Password": "R\u00e9glez nouveau mot de passe", 
  "Set a new password and \"Save\"": "D\u00e9finir un nouveau mot de passe et &quot;Save&quot;", 
+ "Short Bio": "Courte biographie", 
  "Sync Inbox": "Sync bo\u00eete de r\u00e9ception", 
  "System User": "L&#39;utilisateur du syst\u00e8me", 
  "These values will be automatically updated in transactions and also will be useful to restrict permissions for this user on transactions containing these values.": "Ces valeurs seront automatiquement mis \u00e0 jour dans les transactions et sera \u00e9galement utile pour restreindre les autorisations pour cet utilisateur sur les transactions contenant ces valeurs.", 
@@ -60,5 +63,6 @@
  "fran\u00e7ais": "fran\u00e7ais", 
  "nederlands": "nederlands", 
  "portugu\u00eas": "portugu\u00eas", 
+ "portugu\u00eas brasileiro": "portugu\u00eas brasileiro", 
  "user_image_show": "user_image_show"
 }

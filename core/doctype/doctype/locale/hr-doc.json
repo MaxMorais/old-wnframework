@@ -1,5 +1,7 @@
 {
  "Allow Attach": "Dopustite Prilo\u017ei", 
+ "Allow Import": "Dopustite Uvoz", 
+ "Allow Import via Data Import Tool": "Dopustite uvoz preko Data Import Alat", 
  "Allow Rename": "Dopustite Preimenuj", 
  "Attachments": "Privitci", 
  "Auto Name": "Auto Ime", 
@@ -21,6 +23,7 @@
  "Hide Heading": "Sakrij Naslov", 
  "Hide Print": "Sakrij Ispis", 
  "Hide Toolbar": "Sakrij alatne trake", 
+ "Icon": "Ikona", 
  "In Dialog": "U Dialog", 
  "Is Child Table": "Je Dijete Tablica", 
  "Is Single": "Je Samac", 

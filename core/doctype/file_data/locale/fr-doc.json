@@ -1,6 +1,9 @@
 {
+ "Attached To DocType": "Attach\u00e9 \u00e0 DOCTYPE", 
+ "Attached To Name": "Accol\u00e9 au nom", 
  "Core": "C\u0153ur", 
  "File Data": "Fichier de donn\u00e9es", 
  "File Name": "Nom du fichier", 
+ "File Size": "Taille du fichier", 
  "File URL": "URL du fichier"
 }

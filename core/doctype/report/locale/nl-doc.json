@@ -1,4 +1,5 @@
 {
+ "Add Total Row": "Voeg Totaal Row", 
  "Core": "Kern", 
  "Disabled": "Invalide", 
  "Is Standard": "Is Standaard", 
@@ -8,6 +9,9 @@
  "Query Report": "Query Report", 
  "Ref DocType": "Ref DocType", 
  "Report": "Verslag", 
+ "Report Builder": "Report Builder", 
  "Report Name": "Rapportnaam", 
+ "Report Type": "Meld Type", 
+ "Script Report": "Script Report", 
  "Yes": "Ja"
 }

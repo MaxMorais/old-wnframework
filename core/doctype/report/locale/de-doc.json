@@ -1,4 +1,5 @@
 {
+ "Add Total Row": "\u0625\u0636\u0627\u0641\u0629 \u0635\u0641 \u0627\u0644\u0625\u062c\u0645\u0627\u0644\u064a", 
  "Core": "Kern", 
  "Disabled": "Behindert", 
  "Is Standard": "Ist Standard", 
@@ -8,6 +9,9 @@
  "Query Report": "Query Report", 
  "Ref DocType": "Ref DocType", 
  "Report": "Bericht", 
+ "Report Builder": "\u062a\u0642\u0631\u064a\u0631 \u0645\u0646\u0634\u0626", 
  "Report Name": "Report Name", 
+ "Report Type": "\u0646\u0648\u0639 \u0627\u0644\u062a\u0642\u0631\u064a\u0631", 
+ "Script Report": "\u062a\u0642\u0631\u064a\u0631 \u0627\u0644\u0646\u0635\u064a", 
  "Yes": "Ja"
 }

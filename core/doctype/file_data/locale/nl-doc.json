@@ -1,6 +1,9 @@
 {
+ "Attached To DocType": "Bijlage Aan DocType", 
+ "Attached To Name": "Gehecht Aan Naam", 
  "Core": "Kern", 
  "File Data": "File Data", 
  "File Name": "Bestandsnaam", 
+ "File Size": "Bestand Grootte", 
  "File URL": "File-URL"
 }
