@@ -1,0 +1,11 @@
+{
+ "Core": "Kern", 
+ "Doc Status": "Doc-Status", 
+ "Message": "Nachricht", 
+ "Only Allow Edit For": "F\u00fcr nur erlauben bearbeiten", 
+ "Represents the states allowed in one document and role assigned to change the state.": "Stellt die Zust\u00e4nde in einem Dokument und Ver\u00e4nderung zugewiesene Rolle des Staates erlaubt.", 
+ "State": "Zustand", 
+ "Update Field": "Felder aktualisieren", 
+ "Update Value": "Aktualisieren Wert", 
+ "Workflow Document State": "Workflow Document Staat"
+}

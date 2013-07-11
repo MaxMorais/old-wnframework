@@ -1,0 +1,19 @@
+{
+ "Allow Attach": "Lassen Befestigen", 
+ "Core": "Kern", 
+ "Customize Form": "Formular anpassen", 
+ "Customize Label, Print Hide, Default etc.": "Passen Label, Print Hide, Standard, etc.", 
+ "Default Print Format": "Standard Print Format", 
+ "Enter Form Type": "Geben Formulartyp", 
+ "Fields": "Felder", 
+ "Fields separated by comma (,) will be included in the<br /><b>Search By</b> list of Search dialog box": "Felder durch ein Komma (,) getrennt werden in der <br /> Suche aufgenommen werden </ b> Liste der Such-Dialogfeld", 
+ "Hide Copy": "Ausblenden kopieren", 
+ "Hide Email": "Ausblenden Email", 
+ "Hide Print": "Ausblenden drucken", 
+ "Load Print View on opening of an existing form": "Legen Druckansicht beim \u00d6ffnen eines vorhandenen Formulars", 
+ "Max Attachments": "Max Attachments", 
+ "Note: maximum attachment size = 1mb": "Hinweis: Die maximale Gr\u00f6\u00dfe von Anh\u00e4ngen = 1mb", 
+ "Properties": "Eigenschaften", 
+ "Search Fields": "Search Fields", 
+ "Show Print First": "Erste Show Print"
+}

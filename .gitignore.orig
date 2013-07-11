@@ -1,0 +1,14 @@
+*.pyc
+*.py~
+*.comp.js
+*.DS_Store
+<<<<<<< HEAD
+locale
+.wnf-lang-status
+=======
+user_files
+logs
+defs.py
+.project
+.pydevproject
+>>>>>>> 182a5626b1612d60525368e27db266db7d2ef848

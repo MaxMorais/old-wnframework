@@ -1,0 +1,16 @@
+{
+ "Core": "Kern", 
+ "Default Value": "Default Value", 
+ "DocField": "DocField", 
+ "DocType": "DOCTYPE", 
+ "DocType or Field": "DocType oder Field", 
+ "Field Name": "Feldname", 
+ "Help": "Hilfe", 
+ "ID (name) of the entity whose property is to be set": "ID (Name) des Unternehmens, dessen Eigenschaft gesetzt werden", 
+ "New value to be set": "Neuer Wert eingestellt werden", 
+ "Property": "Eigentum", 
+ "Property Setter": "Property Setter", 
+ "Property Setter overrides a standard DocType or Field property": "Property Setter \u00fcberschreibt die Standard-DocType Feld oder Eigenschaft", 
+ "Property Type": "Art der Immobilie", 
+ "Set Value": "Wert festlegen"
+}

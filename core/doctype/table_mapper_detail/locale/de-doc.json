@@ -1,0 +1,12 @@
+{
+ "Core": "Kern", 
+ "From Field": "Vom Feld", 
+ "From Table": "Aus der Tabelle", 
+ "Match Id": "Spiel Id", 
+ "Reference DocType Key": "Key Reference DocType", 
+ "Reference Docname Key": "Key Reference docname", 
+ "Table Mapper Detail": "Tabelle Mapper Details", 
+ "To Field": "Zu Feld", 
+ "To Table": "Tabelle", 
+ "Validation Logic": "Validation Logic"
+}

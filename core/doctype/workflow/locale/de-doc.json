@@ -1,0 +1,20 @@
+{
+ "All possible Workflow States and roles of the workflow. <br>Docstatus Options: 0 is\"Saved\", 1 is \"Submitted\" and 2 is \"Cancelled\"": "Alle m\u00f6glichen Workflow-Status und Rollen des Workflows. <br> DocStatus Optionen: 0 wird \"Gespeichert\" wird ein \"Eingereicht\" und 2 \"Cancelled\"", 
+ "Core": "Kern", 
+ "Defines workflow states and rules for a document.": "Definiert Workflow-Status und Regeln f\u00fcr ein Dokument.", 
+ "Different \"States\" this document can exist in. Like \"Open\", \"Pending Approval\" etc.": "Different \"Staaten\" in diesem Dokument existieren kann in. Gef\u00e4llt mir \"Open\", \"Pending Approval\" etc.", 
+ "DocType on which this Workflow is applicable.": "DOCTYPE, auf denen diese Workflow-anwendbar ist.", 
+ "Document Type": "Document Type", 
+ "Field that represents the Workflow State of the transaction (if field is not present, a new hidden Custom Field will be created)": "Feld, das den Workflow-Status der Transaktion darstellt (wenn das Feld nicht vorhanden ist, eine neue versteckte Custom Field wird erstellt)", 
+ "If checked, all other workflows become inactive.": "Wenn aktiviert, werden alle anderen Workflows inaktiv.", 
+ "Is Active": "Aktiv ist", 
+ "Rules defining transition of state in the workflow.": "Regeln definieren Zustands\u00fcbergang im Workflow.", 
+ "Rules for how states are transitions, like next state and which role is allowed to change state etc.": "Regeln f\u00fcr die Staaten sind \u00dcberg\u00e4nge, wie neben Staat und welche Rolle darf Staates usw. \u00e4ndern", 
+ "States": "Staaten", 
+ "Transition Rules": "\u00dcbergangsregeln", 
+ "Workflow": "Workflow", 
+ "Workflow Document States": "Workflow Document Staaten", 
+ "Workflow Name": "Workflow-Name", 
+ "Workflow State Field": "Workflow State Field", 
+ "Workflow Transitions": "Workflow Transitions"
+}
