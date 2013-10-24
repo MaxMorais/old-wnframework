@@ -1,0 +1,37 @@
+[
+ {
+  "creation": "2013-10-15 17:31:42", 
+  "docstatus": 0, 
+  "modified": "2013-10-22 23:51:42", 
+  "modified_by": "Administrator", 
+  "owner": "Administrator"
+ }, 
+ {
+  "doctype": "Page", 
+  "icon": "icon-globe", 
+  "module": "Core", 
+  "name": "__common__", 
+  "page_name": "translation-tool", 
+  "standard": "Yes", 
+  "title": "Translate this Application"
+ }, 
+ {
+  "doctype": "Page Role", 
+  "name": "__common__", 
+  "parent": "translation-tool", 
+  "parentfield": "roles", 
+  "parenttype": "Page"
+ }, 
+ {
+  "doctype": "Page", 
+  "name": "translation-tool"
+ }, 
+ {
+  "doctype": "Page Role", 
+  "role": "Administrator"
+ }, 
+ {
+  "doctype": "Page Role", 
+  "role": "System Manager"
+ }
+]
