@@ -37,4 +37,7 @@ div.translation-area table thead tr.active th {
 }
 .namespace div.list-group-item:last-child {
 	border-bottom: 0px;
-};
+}
+div.sections-area select.form-control {
+	margin-bottom: 8px;
+}

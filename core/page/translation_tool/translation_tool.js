@@ -17,6 +17,7 @@ wn.TranslateThisApp = Class.extend({
 		this.wrapper.appframe.add_breadcrumb("icon-book");
 		this.langs = {};
 		this.namespace = {};
+		this.current_contenttype = "DocType",
 		this.current_lang = wn.boot.lang;
 		this.current_doctype = false;
 		this.changed = false;
@@ -43,7 +44,7 @@ wn.TranslateThisApp = Class.extend({
 			this.wrapper.appframe.add_button(
 				wn._('Make a new language'),
 				function(){
-					me.create_new_language_files();
+					me.create_new_language_file();
 				},
 				'icon-plus'
 			);
@@ -57,6 +58,13 @@ wn.TranslateThisApp = Class.extend({
 			this.wrapper.content_area = $(repl('<div class="container">'
 				+ '<div class="row">'
 					+ '<div class="sections-area col-sm-3">'
+						+ '<label for="content_type">%(ct_label)s</label>'
+						+ '<select name="content_type" class="form-control">'
+							+'<option value="%(ct1)s" selected>%(ct1_label)s</option>'
+							+'<option value="%(ct2)s">%(ct2_label)s</option>'
+							+'<option value="%(ct3)s">%(ct3_label)s</option>'
+							+'<option value="%(ct4)s">%(ct4_label)s</option>'
+						+'</select>'
 						+ '<div class="panel-group namespace" id="namespace"></div>'
 					+ '</div>'
 					+ '<div class="translation-area col-sm-9">'
@@ -72,11 +80,26 @@ wn.TranslateThisApp = Class.extend({
 					+ '</div>'
 				+ '</div>'
 			+ '</div>', {
-				phrase: wn._('Phrase')
+				phrase: wn._('Phrase'),
+				ct_label: wn._('Translate a'),
+				ct1: 'DocType',
+				ct1_label: wn._('DocType'),
+				ct2: 'Page',
+				ct2_label: wn._('Page'),
+				ct3: 'Print Format',
+				ct3_label: wn._('Print Format'),
+				ct4: 'Report',
+				ct4_label: wn._('Report')
 			})).appendTo(this.body);
+
 			this.wrapper.content_table_body = $('tbody', this.wrapper.content_area);
+
+			this.wrapper.content_selector = $('select[name="content_type"]', this.wrapper.content_area)
+				.change(function(){
+					me.set_current_contenttype($(this).find('option:selected').val());
+				});
 			
-			this.wrapper.lang_selector = $('<select name="lang"></select>')
+			this.wrapper.lang_selector = $('<select name="lang" class="form-control"></select>')
 				.change(function(){
 					me.set_current_lang($(this).find('option:selected').val());
 				})
@@ -90,15 +113,22 @@ wn.TranslateThisApp = Class.extend({
 			this.get_message_data();
 		}
 	},
+	set_current_contenttype: function(content_type){
+		this.current_contenttype = content_type;
+		this.current_doctype = null;
+		this.get_namespace_data();
+		this.get_message_data(this.current_lang, content_type);
+		$('.panel-collapse.in', this.wrapper.namespace).parent().find('a.accordion-toggle').click();
+	},
 	set_current_lang: function(lang){
 		this.current_lang = lang;
 		this.current_doctype = null;
-		this.get_message_data(lang);
+		this.get_message_data(lang, this.current_contenttype);
 		$('.panel-collapse.in', this.wrapper.namespace).parent().find('a.accordion-toggle').click();
 	},
 	set_current_doctype: function(dt){
 		this.current_doctype = dt;
-		this.get_message_data(this.current_lang, dt);
+		this.get_message_data(this.current_lang, this.current_contenttype, dt);
 	},
 	make_table_body_rows: function(rows){
 		var me=this, 
@@ -128,6 +158,7 @@ wn.TranslateThisApp = Class.extend({
 							data-parent="#namespace" href="#namespace_%(namespace)s">\
 							%(title)s\
 						</a>\
+						<span class="badge pull-right">%(ndocs)s</span>\
 					</h4>\
 				</div>\
 				<div class="panel-collapse collapse" id="namespace_%(namespace)s">\
@@ -135,6 +166,9 @@ wn.TranslateThisApp = Class.extend({
 				</div>\
 			</div>',
 			si_template = '<div class="list-group-item" data-doctype="%(doctype)s"><a>%(title)s</a></div>';
+
+		this.wrapper.namespace.html("");
+
 		l = modules.length
 
 		function sort_by_translation(x,y){
@@ -160,7 +194,8 @@ wn.TranslateThisApp = Class.extend({
 			$namespace = $(repl(
 				ns_template, {
 					'namespace': module[0],
-					'title': module[1]
+					'title': module[1],
+					'ndocs': ds[module[0]].length
 				}
 			));
 
@@ -197,10 +232,14 @@ wn.TranslateThisApp = Class.extend({
 	},
 	get_namespace_data: function(){
 		var me = this;
+		console.log(this.current_contenttype);
 		wn.call({
 			module: 'core',
 			page: 'translation_tool',
 			method: 'get_lang_namespace',
+			args: {
+				content: this.current_contenttype
+			},
 			callback: function(r){
 				me.namespace = r.message ? r.message : {};
 				if (me.namespace){
@@ -209,14 +248,15 @@ wn.TranslateThisApp = Class.extend({
 			}
 		});
 	},
-	get_message_data: function(lang, doctype){
+	get_message_data: function(lang, contenttype, doctype){
 		var me = this,
 			lang = lang? lang : this.current_lang,
 			doctype = doctype ? doctype : false,
-			args = {'language': lang};
+			args = {'language': lang, 'content': contenttype ? contenttype : this.current_contenttype};
 		if (doctype){
 			args['doctype'] = doctype;
 		}
+		console.log(args)
 
 		if (this.changed){
 			if (!confirm(wn._('You have pending changes, you want to continue?'))){
@@ -240,7 +280,7 @@ wn.TranslateThisApp = Class.extend({
 		var lang, name,
 			option,
 			template = $('<option></option>');
-
+		this.wrapper.lang_selector.html('');
 		for (name in this.langs){
 			lang = this.langs[name];
 			option = template.clone().val(lang).text(repl('[%(code)s] %(name)s', 
@@ -257,6 +297,7 @@ wn.TranslateThisApp = Class.extend({
 			page: 'translation_tool',
 			method: 'build_messages_files',
 			callback: function(r){
+				show_alert(wn._("Translation files are updated!"));
 			}
 		});
 	},
@@ -280,5 +321,51 @@ wn.TranslateThisApp = Class.extend({
 			}
 		})
 	},
-	create_new_language_files: function(){}
+	create_new_language_file: function(){
+		var me = this;
+		if (!me.dialog){
+			me.dialog = new wn.ui.Dialog({
+				title: wn._('Make a new Language'),
+				width: 350,
+				fields: [
+					{fieldtype: 'Data', fieldname: 'lang_code',
+						label: wn_('Language code'), 
+						description: wn._('See') +': <a href="http://pt.wikipedia.org/wiki/ISO_639">Wikipedia</a>',
+						reqd: true
+					},
+					{fieldtype: 'Description', fieldname: 'lang_description',
+						label: wn._('Description'),
+						description: wn._('Describe preferably using whole native characters.'),
+						reqd: true
+					}
+				]
+			});
+			me.dialog.fields_dict.add_button.input.onclick = function(){
+				var lang_code = me.dialog.fields_dict.lang_code.get_value(),
+					lang_description = me.dialog.fields_dict.lang_description.get_value();
+				if (lang_code && lang_description){
+					wn.call({
+						module: 'core',
+						page: 'translation_tool',
+						method: 'create_new_language_file',
+						args: {
+							'language': lang_code, 
+							'description': lang_description
+						},
+						callback: function(r){
+							me.get_all_languages();
+							show_alert(
+								repl(
+									wn._('New language %(lang_code)s - %(descr)s, as successful created'), 
+									{lang_code: lang_code, descr: lang_description}
+								)
+							);
+						}
+					});
+				}
+			}
+			me.dialog.clear();
+			me.dialog.show();
+		}
+	}
 });

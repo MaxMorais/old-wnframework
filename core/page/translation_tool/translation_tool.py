@@ -15,8 +15,8 @@ import os
 import webnotes
 from webnotes import translate
 from webnotes.utils import get_base_path
-from webnotes.modules import get_doctype_module, get_doc_path
-from json import loads
+from webnotes.modules import get_doc_path
+from json import loads, dumps
 
 @webnotes.whitelist(allow_roles=['System Manager', 'Administrator'])
 def get_all_languages():
@@ -27,7 +27,7 @@ def get_lang_dict():
 	return translate.get_lang_dict()
 
 @webnotes.whitelist(allow_roles=['System Manager', 'Administrator'])
-def get_lang_namespace():
+def get_lang_namespace(content):
 	namespace = webnotes._dict({
 		'modules': [],
 		'doctypes': {},
@@ -37,20 +37,20 @@ def get_lang_namespace():
 		module = module['module_name']
 		namespace.modules.append(module)		
 		namespace.doctypes[module] = []
-		doctypes = webnotes.conn.sql('SELECT name FROM `tabDocType` where module="%s"'%module, as_dict=True)
+		doctypes = webnotes.conn.sql('SELECT name FROM `tab%s` where module="%s"'%(content, module), as_dict=True)
 		for doctype in doctypes:
 			namespace.doctypes[module].append(doctype['name'])
 
 	return namespace
 
 @webnotes.whitelist(allow_roles=['System Manager', 'Administrator'])
-def get_filtered_messages(language, doctype=None):
+def get_filtered_messages(language, content="DocType", doctype=None):
 	out_file = os.path.join(get_base_path(), "%s_temp"%language)
 	if not doctype:
 		translate.export_messages(language, out_file)
 	else:
-		module = get_doctype_module(doctype);
-		basedir = get_doc_path(module, 'DocType', doctype)
+		module = get_content_module(content, doctype);
+		basedir = get_doc_path(module, content, doctype)
 		translate.export_messages(language, out_file, basedir)
 
 	messages = translate.get_all_messages_from_file(out_file)
@@ -62,7 +62,7 @@ def build_message_files():
 	translate.build_message_files()
 
 @webnotes.whitelist(allow_roles=['System Manager', 'Administrator'])
-def import_message_file(language, message, doctype=None):
+def import_message_file(language, message, content="DocType", doctype=None):
 	outfile = os.path.join(get_base_path(), "%s_temp"%language)
 	message = loads(message)
 	def write_file():
@@ -77,10 +77,27 @@ def import_message_file(language, message, doctype=None):
 	write_file()
 
 	if doctype is not None:
-		module = get_doctype_module(doctype)
-		basedir = get_doc_path(module, 'DocType', doctype);
+		module = get_content_module(content, doctype)
+		basedir = get_doc_path(module, content, doctype);
 		translate.import_messages(language, outfile, basedir)
 	else:
 		translate.import_messages(language, outfile)
 
 	os.unlink(outfile)
+
+@webnotes.whitelist(allow_roles=['System Manager', 'Administrator'])
+def create_new_language_file(language, description):
+	import shutil
+	basepath = os.path.join(get_base_path(), 'app', 'translations')
+	filein = os.path.join(basepath, 'base.json')
+	fileout = os.path.join(basepath, u'%s.json'%language)
+	shutil.copy(filein, fileout)
+	with open(os.path.join(basepath, 'languages.json', 'rw')) as lang_data:
+		langs = loads(lang_data.read().decode('utf-8'))
+		langs[language] = description.encode('utf-8')
+		lang_data.write(dumps(lang_data).encode('utf-8'))
+
+def get_content_module(content, dt):
+	if content == 'Report':
+		content, dt = 'DocType', webnotes.conn.get_value(content, dt, 'ref_doctype'), 
+	return webnotes.conn.get_value(content, dt, 'module')
