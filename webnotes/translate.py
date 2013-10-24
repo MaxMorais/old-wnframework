@@ -19,6 +19,11 @@ from csv import reader
 from webnotes.modules import get_doc_path
 from webnotes.utils import get_base_path, cstr
 
+try:
+	from xml.sax.saxutils import escape, unescape
+except ImportError:
+	escape = unescape = lambda x: x
+
 messages = {}
 
 def translate(lang=None):
@@ -46,7 +51,8 @@ def translate(lang=None):
 
 def get_all_languages():
 	try:
-		return [f[:-4] for f in os.listdir("app/translations") if f.endswith(".csv")]
+		return [f[:-4] for f in os.listdir(os.path.join(get_base_path(), "app/translations"
+			)) if f.endswith(".csv")]
 	except OSError, e:
 		if e.args[0]==2:
 			return []
@@ -148,7 +154,13 @@ def build_from_database():
 		"DocType": ["name", "description", "module"],
 		"DocField": ["label", "description"],
 		"custom": get_select_options
-	}))
+	}));
+	build_for_doc_from_database(webnotes._dict({
+		"doctype": "Custom Field",
+		"module_field": "dt",
+		"Custom Field": ["label", "description", "options"],
+		"custom": get_select_options
+	}));
 
 def build_for_doc_from_database(fields):
 	for item in webnotes.conn.sql("""select name from `tab%s`""" % fields.doctype, as_dict=1):
@@ -177,7 +189,6 @@ def build_for_framework(path, mtype, with_doctype_names = False):
 			fname = cstr(fname)
 			if fname.endswith('.' + mtype):
 				messages += get_message_list(os.path.join(basepath, fname))
-				
 				
 	# append module & doctype names
 	if with_doctype_names:
@@ -241,11 +252,13 @@ def write_messages_file(path, messages, mtype):
 	with open(fname, 'w') as msgfile:
 		msgfile.write(json.dumps(filtered, indent=1))
 		
-def export_messages(lang, outfile):
+def export_messages(lang, outfile, basedir=None):
 	"""get list of all messages"""
 	messages = {}
 	# extract messages
-	for (basepath, folders, files) in os.walk('.'):
+	if basedir is None: basedir = get_base_path()
+
+	for (basepath, folders, files) in os.walk(basedir):
 		def _get_messages(messages, basepath, mtype):
 			mlist = get_messages(basepath, mtype)
 			if not mlist:
@@ -255,7 +268,7 @@ def export_messages(lang, outfile):
 			langdata = get_lang_data(basepath, lang, mtype)
 			for m in mlist:
 				if not messages.get(m):
-					messages[m] = langdata.get(m, "")
+					messages[escape(m.replace('\n', '<br/>'))] = escape(langdata.get(m, ""))
 		
 		if os.path.basename(basepath)=='locale':
 			_get_messages(messages, basepath, 'doc')
@@ -273,11 +286,12 @@ def export_messages(lang, outfile):
 				
 				w.writerow([m.encode('utf-8'), messages.get(m, '').encode('utf-8')])
 	
-def import_messages(lang, infile):
+def import_messages(lang, infile, basedir=None):
 	"""make individual message files for each language"""
 	data = dict(get_all_messages_from_file(infile))
-		
-	for (basepath, folders, files) in os.walk('.'):
+	if basedir is None: basedir = get_base_path()
+
+	for (basepath, folders, files) in os.walk(basedir):
 		def _update_lang_file(mtype):
 			"""create a langauge file for the given message type"""
 			messages = get_messages(basepath, mtype)
@@ -289,7 +303,7 @@ def import_messages(lang, infile):
 			# update fresh
 			for m in messages:				
 				if data.get(m):
-					langdata[m] = data.get(m)
+					langdata[unescape(m)] = unescape(data.get(m))
 			
 			if langdata:
 				# write new langfile
