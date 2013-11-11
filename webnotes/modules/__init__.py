@@ -24,9 +24,10 @@ def scrub_dt_dn(dt, dn):
 			
 def get_module_path(module):
 	"""Returns path of the given module"""
+	from webnotes.utils import get_base_path
 	m = scrub(module)
 	
-	app_path = webnotes.utils.get_base_path()
+	app_path = get_base_path()
 	
 	if m in ('core', 'website'):
 		return os.path.join(app_path, 'lib', m)
