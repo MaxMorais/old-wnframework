@@ -36,8 +36,7 @@ bsEditor = Class.extend({
 		}).data("object", this);
 
 		this.bind_hotkeys();
-		this.init_file_drops();
-		
+		this.init_file_drops();		
 	},
 	
 	set_editing: function() {
@@ -56,7 +55,7 @@ bsEditor = Class.extend({
 		this.toolbar = window.bs_editor_toolbar;
 	},
 	setup_inline_toolbar: function() {
-		this.toolbar = new bsEditorToolbar(this.options, this.wrapper);
+		this.toolbar = new bsEditorToolbar(this.options, this.wrapper, this.editor);
 	},
 	onhide: function(action) {
 		this.editing = false;
@@ -193,8 +192,9 @@ bsEditor = Class.extend({
 })
 
 bsEditorToolbar = Class.extend({
-	init: function(options, parent) {
+	init: function(options, parent, editor) {
 		this.options = options;
+		this.editor = editor;
 		this.inline = !!parent;
 		this.options.toolbar_style = $.extend((this.inline ? this.inline_style : this.fixed_style),
 			this.options.toolbar_style || {});
@@ -330,7 +330,8 @@ bsEditorToolbar = Class.extend({
 			me.execCommand($(this).data(me.options.command_role));
 			me.save_selection();
 			// close dropdown
-			me.toolbar.find('[data-toggle="dropdown"]').dropdown("toggle");
+			if(me.toolbar.find("ul.dropdown-menu:visible").length)
+				me.toolbar.find('[data-toggle="dropdown"]').dropdown("toggle");
 			return false;
 		});
 		this.toolbar.find('[data-toggle=dropdown]').click(function() { me.restore_selection() });
@@ -445,7 +446,7 @@ bsHTMLEditor = Class.extend({
 		this.modal.addClass("wn-ignore-click");
 		this.modal.find(".btn-primary").on("click", function() {
 			var html = me.modal.find("textarea").val();
-			$.each(me.dataurls, function(key, val) {
+			$.each(me.editor.dataurls, function(key, val) {
 				html = html.replace(key, val);
 			})
 			me.editor.html(html);
@@ -458,13 +459,13 @@ bsHTMLEditor = Class.extend({
 		this.modal.modal("show")
 		var html = me.editor.html();
 		// pack dataurls so that html display is faster
-		this.dataurls = {}
+		this.editor.dataurls = {}
 		html = html.replace(/<img\s*src=\s*["\'](data:[^,]*),([^"\']*)["\']/g, function(full, g1, g2) {
 			var key = g2.slice(0,5) + "..." + g2.slice(-5);
-			me.dataurls[key] = g1 + "," + g2;
+			me.editor.dataurls[key] = g1 + "," + g2;
 			return '<img src="'+g1 + "," + key+'"';
-		})
-		this.modal.find("textarea").html(html_beautify(html));
+		});
+		this.modal.find("textarea").val(html_beautify(html));
 	}
 });
 

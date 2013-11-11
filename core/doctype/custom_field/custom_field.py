@@ -9,6 +9,10 @@ from webnotes.utils import cint, cstr
 class DocType:
 	def __init__(self, d, dl):
 		self.doc, self.doclist = d, dl
+		
+	def autoname(self):
+		self.set_fieldname()
+		self.doc.name = self.doc.dt + "-" + self.doc.fieldname
 
 	def set_fieldname(self):
 		if not self.doc.fieldname:
@@ -17,8 +21,6 @@ class DocType:
 
 	def validate(self):
 		from webnotes.model.doctype import get
-		self.set_fieldname()
-		
 		temp_doclist = get(self.doc.dt).get_parent_doclist()
 				
 		# set idx
@@ -104,3 +106,19 @@ def get_fields_label(dt=None, form=1):
 		field_list = [cstr(d.fieldname) for d in docfields]
 		return idx_label_list, field_list
 
+def create_custom_field_if_values_exist(doctype, df):
+	df = webnotes._dict(df)
+	if webnotes.conn.sql("""select count(*) from `tab{doctype}` 
+		where ifnull({fieldname},'')!=''""".format(doctype=doctype, fieldname=df.fieldname))[0][0]:
+		
+		webnotes.bean({
+			"doctype":"Custom Field",
+			"dt": doctype,
+			"permlevel": df.permlevel or 0,
+			"label": df.label,
+			"fieldname": df.fieldname,
+			"fieldtype": df.fieldtype,
+			"options": df.options,
+			"insert_after": df.insert_after
+		}).insert()
+		
