@@ -53,6 +53,7 @@ wn.views.CommunicationList = Class.extend({
 			.appendTo(this.parent);
 			
 		this.body = $('<div class="list-group">')
+		.css({"border":"1px solid #dddddd", "border-radius":"4px"})
 			.appendTo(this.wrapper);
 	},
 	
@@ -167,6 +168,7 @@ wn.views.CommunicationComposer = Class.extend({
 		});
 
 		this.dialog.$wrapper.find("[data-edit='outdent']").remove();
+		this.dialog.get_input("send").addClass("btn-primary");
 		
 		$(document).on("upload_complete", function(event, filename, fileurl) {
 			if(me.dialog.display) {

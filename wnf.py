@@ -53,7 +53,8 @@ def get_sites():
 	import os
 	import conf
 	return [site for site in os.listdir(conf.sites_dir)
-			if not os.path.islink(os.path.join(conf.sites_dir, site))]
+			if not os.path.islink(os.path.join(conf.sites_dir, site)) 
+				and os.path.isdir(os.path.join(conf.sites_dir, site))]
 	
 def setup_parser():
 	import argparse
@@ -138,6 +139,7 @@ def setup_utilities(parser):
 	parser.add_argument("--serve", action="store_true", help="Run development server")
 	parser.add_argument("--smtp", action="store_true", help="Run smtp debug server",
 		dest="smtp_debug_server")
+	parser.add_argument("--python", action="store_true", help="get python shell for a site")
 	parser.add_argument("--get_site_status", action="store_true", help="Get site details")
 	parser.add_argument("--update_site_config", nargs=1, 
 		metavar="SITE-CONFIG-JSON", 
@@ -290,7 +292,7 @@ def latest(site=None, verbose=True):
 		
 	except webnotes.modules.patch_handler.PatchError, e:
 		print "\n".join(webnotes.local.patch_log_list)
-		raise e
+		raise
 	finally:
 		webnotes.destroy()
 
@@ -347,6 +349,7 @@ def backup(site=None, with_files=False, verbose=True, backup_path_db=None, backu
 		print "database backup taken -", odb.backup_path_db, "- on", now()
 		if with_files:
 			print "files backup taken -", odb.backup_path_files, "- on", now()
+	webnotes.destroy()
 	return odb
 
 @cmd
@@ -568,7 +571,19 @@ def mysql(site=None):
 	import commands, os
 	msq = commands.getoutput('which mysql')
 	webnotes.init(site=site)
-	os.execv(msq, [msq, '-u', webnotes.conf.db_name, '-p'+webnotes.conf.db_password, webnotes.conf.db_name, webnotes.conf.db_host or "localhost"])
+	os.execv(msq, [msq, '-u', webnotes.conf.db_name, '-p'+webnotes.conf.db_password, webnotes.conf.db_name, '-h', webnotes.conf.db_host or "localhost"])
+	webnotes.destroy()
+
+@cmd
+def python(site=None):
+	import webnotes 
+	import commands, os
+	python = commands.getoutput('which python')
+	webnotes.init(site=site)
+	if site:
+		os.environ["site"] = site
+	os.environ["PYTHONSTARTUP"] = os.path.join(os.path.dirname(__file__), "pythonrc.py")
+	os.execv(python, [python])
 	webnotes.destroy()
 
 @cmd

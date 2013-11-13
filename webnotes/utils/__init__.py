@@ -630,7 +630,7 @@ def get_file_timestamp(fn):
 		return str(cint(os.stat(fn).st_mtime))
 	except OSError, e:
 		if e.args[0]!=2:
-			raise e
+			raise
 		else:
 			return None
 
@@ -910,5 +910,9 @@ def get_site_name(hostname):
 
 def get_disk_usage():
 	"""get disk usage of files folder"""
-	err, out = execute_in_shell("du -hsm {files_path}".format(files_path=get_files_path()))
+	import os
+	files_path = get_files_path()
+	if not os.path.exists(files_path):
+		return 0
+	err, out = execute_in_shell("du -hsm {files_path}".format(files_path=files_path))
 	return cint(out.split("\n")[-2].split("\t")[0])

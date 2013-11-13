@@ -31,9 +31,16 @@ wn.avatar = function(user, large, title) {
 }
 
 wn.ui.set_user_background = function(src) {
-	wn.dom.set_style(repl('body { background: url("%(src)s") no-repeat center center fixed; \
+	if(!src) src = "lib/images/ui/field.jpg";
+	wn.dom.set_style(repl('#page-desktop { \
+		position: fixed;\
+		left: 0px; min-width: 100%; height: 100%; overflow: auto;\
+		padding-top: 14px; \
+		background: url("%(src)s") no-repeat center center fixed; \
 		-webkit-background-size: cover; -moz-background-size: cover; \
-		-o-background-size: cover; background-size: cover;}', {src:src}))
+		-o-background-size: cover; \
+		background-size: cover;\
+	}', {src:src}))
 }
 
 wn.provide('wn.user');
