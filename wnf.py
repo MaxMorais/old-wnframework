@@ -1,6 +1,6 @@
 #!/usr/bin/env python2.7
 
-# Copyright (c) 2013, Web Notes Technologies Pvt. Ltd.
+# Copyright (c) 2013, Web Notes Technologies Pvt. Ltd. and Contributors
 # MIT License. See license.txt
 
 from __future__ import unicode_literals
@@ -137,9 +137,11 @@ def setup_utilities(parser):
 		help="Set administrator password")
 	parser.add_argument("--mysql", action="store_true", help="get mysql shell for a site")
 	parser.add_argument("--serve", action="store_true", help="Run development server")
+	parser.add_argument("--profile", action="store_true", help="enable profiling in development server")
 	parser.add_argument("--smtp", action="store_true", help="Run smtp debug server",
 		dest="smtp_debug_server")
 	parser.add_argument("--python", action="store_true", help="get python shell for a site")
+	parser.add_argument("--ipython", action="store_true", help="get ipython shell for a site")
 	parser.add_argument("--get_site_status", action="store_true", help="Get site details")
 	parser.add_argument("--update_site_config", nargs=1, 
 		metavar="SITE-CONFIG-JSON", 
@@ -149,6 +151,10 @@ def setup_utilities(parser):
 	# clear
 	parser.add_argument("--clear_web", default=False, action="store_true",
 		help="Clear website cache")
+	parser.add_argument("--build_sitemap", default=False, action="store_true",
+		help="Build Website Sitemap")
+	parser.add_argument("--rebuild_sitemap", default=False, action="store_true",
+		help="Rebuild Website Sitemap")
 	parser.add_argument("--clear_cache", default=False, action="store_true",
 		help="Clear cache, doctype cache and defaults")
 	parser.add_argument("--reset_perms", default=False, action="store_true",
@@ -274,6 +280,7 @@ def latest(site=None, verbose=True):
 	import webnotes.modules.patch_handler
 	import webnotes.model.sync
 	import webnotes.plugins
+	from website.doctype.website_sitemap_config.website_sitemap_config import build_website_sitemap_config
 	
 	webnotes.connect(site=site)
 	
@@ -289,6 +296,9 @@ def latest(site=None, verbose=True):
 		
 		# remove __init__.py from plugins
 		webnotes.plugins.remove_init_files()
+		
+		# build website config if any changes in templates etc.
+		build_website_sitemap_config()
 		
 	except webnotes.modules.patch_handler.PatchError, e:
 		print "\n".join(webnotes.local.patch_log_list)
@@ -415,7 +425,23 @@ def clear_cache(site=None):
 def clear_web(site=None):
 	import webnotes.webutils
 	webnotes.connect(site=site)
+	from website.doctype.website_sitemap_config.website_sitemap_config import build_website_sitemap_config
+	build_website_sitemap_config()
 	webnotes.webutils.clear_cache()
+	webnotes.destroy()
+
+@cmd
+def build_sitemap(site=None):
+	from website.doctype.website_sitemap_config.website_sitemap_config import build_website_sitemap_config
+	webnotes.connect(site=site)
+	build_website_sitemap_config()
+	webnotes.destroy()
+
+@cmd
+def rebuild_sitemap(site=None):
+	from website.doctype.website_sitemap_config.website_sitemap_config import rebuild_website_sitemap_config
+	webnotes.connect(site=site)
+	rebuild_website_sitemap_config()
 	webnotes.destroy()
 
 @cmd
@@ -587,15 +613,22 @@ def python(site=None):
 	webnotes.destroy()
 
 @cmd
+def ipython(site=None):
+	import webnotes
+	webnotes.connect(site=site)
+	import IPython
+	IPython.embed()
+
+@cmd
 def smtp_debug_server():
 	import commands, os
 	python = commands.getoutput('which python')
 	os.execv(python, [python, '-m', "smtpd", "-n", "-c", "DebuggingServer", "localhost:25"])
 	
 @cmd
-def serve(port=8000):
+def serve(port=8000, profile=False):
 	import webnotes.app
-	webnotes.app.serve(port=port)
+	webnotes.app.serve(port=port, profile=profile)
 
 def replace_code(start, txt1, txt2, extn, search=None, force=False):
 	"""replace all txt1 by txt2 in files with extension (extn)"""

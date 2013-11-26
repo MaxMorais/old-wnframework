@@ -1,4 +1,4 @@
-# Copyright (c) 2013, Web Notes Technologies Pvt. Ltd.
+# Copyright (c) 2013, Web Notes Technologies Pvt. Ltd. and Contributors
 # MIT License. See license.txt 
 
 from __future__ import unicode_literals
@@ -9,6 +9,7 @@ Build the `public` folders and setup languages
 """
 
 import os, sys, webnotes
+from cssmin import cssmin
 
 
 def bundle(no_compress, cms_make=True):
@@ -109,6 +110,9 @@ class Bundle:
 			except Exception, e:
 				print "--Error in:" + f + "--"
 				print webnotes.getTraceback()
+
+		if not self.no_compress and out_type == 'css':
+			outtxt = cssmin(outtxt)
 						
 		with open(outfile, 'w') as f:
 			f.write(outtxt.encode("utf-8"))

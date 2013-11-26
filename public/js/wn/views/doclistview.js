@@ -1,4 +1,4 @@
-// Copyright (c) 2013, Web Notes Technologies Pvt. Ltd.
+// Copyright (c) 2013, Web Notes Technologies Pvt. Ltd. and Contributors
 // MIT License. See license.txt
 
 wn.provide('wn.views.doclistview');
@@ -64,7 +64,7 @@ wn.views.DocListView = wn.ui.Listing.extend({
 		
 		this.$page.find(".layout-main-section")
 			.css({"border-right":"1px solid #d7d7d7"})
-			.parent().css({"margin-top":"-20px"});
+			.parent().css({"margin-top":"-15px"});
 		this.appframe = this.page.appframe;
 		var module = locals.DocType[this.doctype].module;
 		
@@ -246,6 +246,7 @@ wn.views.DocListView = wn.ui.Listing.extend({
 	init_minbar: function() {
 		var me = this;
 		this.appframe.add_icon_btn("2", 'icon-tag', wn._('Show Tags'), function() { me.toggle_tags(); });
+		this.wrapper.on("click", ".list-tag-preview", function() { me.toggle_tags(); });
 		if(this.can_delete || this.listview.settings.selectable) {
 			this.appframe.add_icon_btn("2", 'icon-remove', wn._('Delete'), function() { me.delete_items(); });
 			this.appframe.add_icon_btn("2", 'icon-ok', wn._('Select All'), function() { 

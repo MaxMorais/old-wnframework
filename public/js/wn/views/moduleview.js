@@ -1,4 +1,4 @@
-// Copyright (c) 2013, Web Notes Technologies Pvt. Ltd.
+// Copyright (c) 2013, Web Notes Technologies Pvt. Ltd. and Contributors
 // MIT License. See license.txt
 
 wn.provide("wn.views.moduleview");
@@ -248,7 +248,7 @@ wn.views.moduleview.ModuleView = Class.extend({
 		$(me.wrapper).find(".badge-important").remove();
 		if(wn.boot.notification_info.open_count_doctype) {
 			$.each(wn.boot.notification_info.open_count_doctype, function(doctype, count) {
-				if(in_list(me.doctypes, doctype)) {
+				if(count && in_list(me.doctypes, doctype)) {
 					me.set_top_item_count(doctype, null, count);
 					$('<span>')
 						.css({

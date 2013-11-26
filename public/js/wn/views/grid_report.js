@@ -1,4 +1,4 @@
-// Copyright (c) 2013, Web Notes Technologies Pvt. Ltd.
+// Copyright (c) 2013, Web Notes Technologies Pvt. Ltd. and Contributors
 // MIT License. See license.txt
 
 wn.provide("wn.report_dump");
@@ -138,7 +138,7 @@ wn.views.GridReport = Class.extend({
 		var me = this;
 		var progress_bar = null;
 		if(!this.setup_filters_done)
-			progress_bar = this.wrapper.find(".progress .bar");
+			progress_bar = this.wrapper.find(".progress .progress-bar");
 			
 		wn.report_dump.with_data(this.doctypes, function() {
 			if(!me.setup_filters_done) {

@@ -1,4 +1,4 @@
-# Copyright (c) 2013, Web Notes Technologies Pvt. Ltd.
+# Copyright (c) 2013, Web Notes Technologies Pvt. Ltd. and Contributors
 # MIT License. See license.txt 
 
 # util __init__.py
@@ -188,9 +188,12 @@ def get_user_time_zone():
 	return webnotes.local.user_time_zone
 
 def convert_utc_to_user_timezone(utc_timestamp):
-	from pytz import timezone
+	from pytz import timezone, UnknownTimeZoneError
 	utcnow = timezone('UTC').localize(utc_timestamp)
-	return utcnow.astimezone(timezone(get_user_time_zone()))
+	try:
+		return utcnow.astimezone(timezone(get_user_time_zone()))
+	except UnknownTimeZoneError:
+		return utcnow
 
 def now():
 	"""return current datetime as yyyy-mm-dd hh:mm:ss"""
@@ -916,3 +919,10 @@ def get_disk_usage():
 		return 0
 	err, out = execute_in_shell("du -hsm {files_path}".format(files_path=files_path))
 	return cint(out.split("\n")[-2].split("\t")[0])
+
+def expand_partial_links(html):
+	import re
+	url = get_url()
+	if not url.endswith("/"): url += "/"
+	return re.sub('(href|src){1}([\s]*=[\s]*[\'"]?)((?!http)[^\'" >]+)([\'"]?)', 
+		'\g<1>\g<2>{}\g<3>\g<4>'.format(url), html)

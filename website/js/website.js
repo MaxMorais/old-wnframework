@@ -1,15 +1,8 @@
-// Copyright (c) 2013, Web Notes Technologies Pvt. Ltd.
+// Copyright (c) 2013, Web Notes Technologies Pvt. Ltd. and Contributors
 // MIT License. See license.txt 
 if(!window.wn) wn = {};
 
 $.extend(wn, {
-	show_message: function(text, icon) {
-		if(!icon) icon="icon-refresh icon-spin";
-		treemapper.hide_message();
-		$('<div class="message-overlay"></div>')
-			.html('<div class="content"><i class="'+icon+' text-muted"></i><br>'
-				+text+'</div>').appendTo(document.body);
-	},
 	provide: function(namespace) {
 		var nsl = namespace.split('.');
 		var parent = window;
@@ -292,5 +285,11 @@ $(document).ready(function() {
 	window.logged_in = getCookie("sid") && getCookie("sid")!=="Guest";
 	$("#website-login").toggleClass("hide", logged_in ? true : false);
 	$("#website-post-login").toggleClass("hide", logged_in ? false : true);
+	
+	// switch to app link
+	if(getCookie("system_user")==="yes") {
+		$("#website-post-login .dropdown-menu").append('<li class="divider"></li>\
+			<li><a href="app.html"><i class="icon-fixed-width icon-th-large"></i> Switch To App</a></li>');
+	}
 });
 

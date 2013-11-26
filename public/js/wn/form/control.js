@@ -1,4 +1,4 @@
-// Copyright (c) 2013, Web Notes Technologies Pvt. Ltd.
+// Copyright (c) 2013, Web Notes Technologies Pvt. Ltd. and Contributors
 // MIT License. See license.txt
 
 wn.ui.form.make_control = function(opts) {
@@ -104,7 +104,7 @@ wn.ui.form.ControlImage = wn.ui.form.Control.extend({
 		this._super();
 		var me = this;
 		this.$wrapper
-		.css({"margin-bottom": "10px"})
+		.css({"margin-bottom": "10px", "margin-right": "15px", "float": "right", "text-align": "right"})
 		.on("refresh", function() {
 			me.$wrapper.empty();
 			if(me.df.options && me.frm.doc[me.df.options]) {
@@ -382,9 +382,6 @@ wn.ui.form.ControlDate = wn.ui.form.ControlData.extend({
 	set_datepicker: function() {
 		this.datepicker_options.dateFormat = 
 			(wn.boot.sysdefaults.date_format || 'yyyy-mm-dd').replace("yyyy", "yy")
-		if(this.not_in_form && this.dialog_wrapper) {
-			this.$input.css("z-index", cint($(this.dialog_wrapper).zIndex()));
-		}
 		this.$input.datepicker(this.datepicker_options);
 	},
 	parse: function(value) {
@@ -422,14 +419,10 @@ wn.ui.form.ControlTime = wn.ui.form.ControlData.extend({
 
 wn.ui.form.ControlDatetime = wn.ui.form.ControlDate.extend({
 	set_datepicker: function() {
+		this.datepicker_options.timeFormat = "hh:mm:ss";
 		this.datepicker_options.dateFormat = 
 			(wn.boot.sysdefaults.date_format || 'yy-mm-dd').replace('yyyy','yy');
-		this.datepicker_options.timeFormat = "hh:mm:ss";
 		
-		if(this.not_in_form && this.dialog_wrapper) {
-			this.$input.css("z-index", cint($(this.dialog_wrapper).zIndex()));
-		}
-
 		this.$input.datetimepicker(this.datepicker_options);
 	},
 	make_input: function() {
@@ -946,8 +939,16 @@ wn.ui.form.ControlLink = wn.ui.form.ControlData.extend({
 	},
 });
 
-wn.ui.form.ControlCode = wn.ui.form.ControlInput.extend({
-	editor_name: "wn.editors.ACE",
+
+wn.ui.form.ControlCode = wn.ui.form.ControlText.extend({
+	make_input: function() {
+		this._super();
+		$(this.input_area).find("textarea").css({"height":"400px", "font-family": "Monaco, \"Courier New\", monospace"});
+	}
+});
+
+wn.ui.form.ControlTextEditor = wn.ui.form.ControlCode.extend({
+	editor_name: "bsEditor",
 	horizontal: false,
 	make_input: function() {
 		$(this.input_area).css({"min-height":"360px"});
@@ -960,6 +961,9 @@ wn.ui.form.ControlCode = wn.ui.form.ControlInput.extend({
 			field: this
 		});
 		this.has_input = true;
+		this.editor.editor.keypress("ctrl+s meta+s", function() {
+			me.frm.save_or_update();
+		});
 	},
 	get_value: function() {
 		return this.editor.get_value();
@@ -968,16 +972,6 @@ wn.ui.form.ControlCode = wn.ui.form.ControlInput.extend({
 		this.editor.set_input(value);
 		this.last_value = value;
 	}
-});
-
-wn.ui.form.ControlTextEditor = wn.ui.form.ControlCode.extend({
-	editor_name: "bsEditor",
-	make_input: function() {
-		this._super();
-		this.editor.editor.keypress("ctrl+s meta+s", function() {
-			me.frm.save_or_update();
-		});
-	},
 });
 
 wn.ui.form.ControlTable = wn.ui.form.Control.extend({

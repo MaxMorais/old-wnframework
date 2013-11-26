@@ -1,4 +1,4 @@
-# Copyright (c) 2013, Web Notes Technologies Pvt. Ltd.
+# Copyright (c) 2013, Web Notes Technologies Pvt. Ltd. and Contributors
 # MIT License. See license.txt
 
 from __future__ import unicode_literals
@@ -10,7 +10,6 @@ class DocType:
 		self.doc, self.doclist = d, dl
 		
 	def validate(self):
-		self.set_home_page()
 		self.validate_top_bar_items()
 		self.validate_footer_items()
 		
@@ -59,17 +58,22 @@ class DocType:
 	def on_update(self):
 		# make js and css
 		# clear web cache (for menus!)
+		self.set_home_page()
+
 		from webnotes.webutils import clear_cache
 		clear_cache()
 
 	def set_home_page(self):
-		from webnotes.model.doc import Document
-		webnotes.conn.sql("""delete from `tabDefault Home Page` where role='Guest'""")
+		if self.doc.home_page:
+			webnotes.bean("Web Page", self.doc.home_page).save()
+			
+			from webnotes.model.doc import Document
+			webnotes.conn.sql("""delete from `tabDefault Home Page` where role='Guest'""")
 		
-		d = Document('Default Home Page')
-		d.parent = 'Control Panel'
-		d.parenttype = 'Control Panel'
-		d.parentfield = 'default_home_pages'
-		d.role = 'Guest'
-		d.home_page = self.doc.home_page
-		d.save()
+			d = Document('Default Home Page')
+			d.parent = 'Control Panel'
+			d.parenttype = 'Control Panel'
+			d.parentfield = 'default_home_pages'
+			d.role = 'Guest'
+			d.home_page = self.doc.home_page
+			d.save()

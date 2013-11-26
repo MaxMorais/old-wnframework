@@ -1,4 +1,4 @@
-// Copyright (c) 2013, Web Notes Technologies Pvt. Ltd.
+// Copyright (c) 2013, Web Notes Technologies Pvt. Ltd. and Contributors
 // MIT License. See license.txt
 
 wn.provide("wn.ui.form");
@@ -11,6 +11,7 @@ wn.ui.form.Toolbar = Class.extend({
 		this.appframe.set_views_for(this.frm.meta.name, "form");
 	},
 	make: function() {
+		this.appframe.set_title_right(); // clear
 		this.set_title();
 		this.show_title_as_dirty();
 
@@ -36,14 +37,17 @@ wn.ui.form.Toolbar = Class.extend({
 	},
 	set_title: function() {
 		var title = wn._(this.frm.docname);
-		if(title.length > 30) {
-			title = title.substr(0,30) + "...";
-		}
 		var me = this;
-		this.appframe.set_title(title + this.get_lock_status(), wn._(this.frm.docname));
-		this.appframe.set_title_left('<i class="icon-angle-left"></i> ' + wn._(this.frm.doctype), 
-			function() { wn.set_route("List", me.frm.doctype); });
-		this.appframe.set_title_right();
+		this.appframe.set_title(title + this.get_lock_status(), wn._(this.frm.docname), 
+			this.frm.doc.modified_by);
+		
+		if(this.frm.meta.issingle) {
+			this.appframe.set_title_left('<i class="icon-angle-left"></i> ' + wn._(this.frm.meta.module), 
+				function() { wn.set_route(wn.modules[me.frm.meta.module].link); });
+		} else {
+			this.appframe.set_title_left('<i class="icon-angle-left"></i> ' + wn._(this.frm.doctype), 
+				function() { wn.set_route("List", me.frm.doctype); });
+		}
 	},
 	show_infobar: function() {
 		/* docs:
@@ -64,9 +68,9 @@ wn.ui.form.Toolbar = Class.extend({
 				case 0:
 					return ' <i class="icon-unlock text-muted" title="Not Submitted">';
 				case 1:
-					return ' <i class="icon-lock text-muted" title="Submitted">';
+					return ' <i class="icon-lock text-primary" title="Submitted">';
 				case 2:
-					return ' <i class="icon-remove text-muted" title="Cancelled">';
+					return ' <i class="icon-remove text-danger" title="Cancelled">';
 			}
 		} else {
 			return "";

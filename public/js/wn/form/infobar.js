@@ -1,4 +1,4 @@
-// Copyright (c) 2013, Web Notes Technologies Pvt. Ltd.
+// Copyright (c) 2013, Web Notes Technologies Pvt. Ltd. and Contributors
 // MIT License. See license.txt
 
 wn.ui.form.InfoBar = Class.extend({
@@ -11,6 +11,10 @@ wn.ui.form.InfoBar = Class.extend({
 		var me = this;
 
 		this.appframe.iconbar.clear(2);
+		this.$reload = this.appframe.add_icon_btn("2", "icon-refresh", "Reload Page", 
+			function() { me.frm.reload_doc(); })
+
+
 		this.$timestamp = this.appframe.add_icon_btn("2", "icon-user", "Creation / Modified By", 
 			function() { })
 
@@ -39,14 +43,14 @@ wn.ui.form.InfoBar = Class.extend({
 			this.$print = this.appframe.add_icon_btn("2", "icon-envelope", "Email", 
 				function() { me.frm.email_doc(); });
 		}
-
-		if(!this.frm.meta.issingle) {
-			this.$prev = this.appframe.add_icon_btn("2", "icon-arrow-left", "Previous Record", 
-				function() { me.go_prev_next(true); });
-
-			this.$next = this.appframe.add_icon_btn("2", "icon-arrow-right", "Next Record", 
-				function() { me.go_prev_next(false); });
-		}
+		// 
+		// if(!this.frm.meta.issingle) {
+		// 	this.$prev = this.appframe.add_icon_btn("2", "icon-arrow-left", "Previous Record", 
+		// 		function() { me.go_prev_next(true); });
+		// 
+		// 	this.$next = this.appframe.add_icon_btn("2", "icon-arrow-right", "Next Record", 
+		// 		function() { me.go_prev_next(false); });
+		// }
 		
 	},
 	

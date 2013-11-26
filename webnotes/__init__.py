@@ -1,4 +1,4 @@
-# Copyright (c) 2013, Web Notes Technologies Pvt. Ltd.
+# Copyright (c) 2013, Web Notes Technologies Pvt. Ltd. and Contributors
 # MIT License. See license.txt 
 """
 globals attached to webnotes module
@@ -9,6 +9,7 @@ from __future__ import unicode_literals
 
 from werkzeug.local import Local
 from werkzeug.exceptions import NotFound
+from MySQLdb import ProgrammingError as SQLError
 
 import os
 import json
@@ -336,9 +337,10 @@ def has_permission(doctype, ptype="read", refdoc=None):
 	"""check if user has permission"""
 	from webnotes.utils import cint
 	
-	meta = get_doctype(doctype)
-	if session.user=="Administrator" or meta[0].is_table==1: 
+	if session.user=="Administrator" or conn.get_value("DocType", doctype, "istable")==1:
 		return True
+		
+	meta = get_doctype(doctype)
 	
 	# get user permissions
 	user_roles = get_roles()
@@ -456,7 +458,7 @@ def reload_doc(module, dt=None, dn=None, force=False):
 
 def rename_doc(doctype, old, new, debug=0, force=False, merge=False):
 	from webnotes.model.rename_doc import rename_doc
-	rename_doc(doctype, old, new, force=force, merge=merge)
+	return rename_doc(doctype, old, new, force=force, merge=merge)
 
 def insert(doclist):
 	import webnotes.model

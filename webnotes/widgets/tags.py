@@ -1,4 +1,4 @@
-# Copyright (c) 2013, Web Notes Technologies Pvt. Ltd.
+# Copyright (c) 2013, Web Notes Technologies Pvt. Ltd. and Contributors
 # MIT License. See license.txt 
 
 from __future__ import unicode_literals
@@ -109,6 +109,5 @@ class DocTags:
 		
 	def setup(self):
 		"""adds the _user_tags column if not exists"""
-		webnotes.conn.commit()
-		webnotes.conn.sql("alter table `tab%s` add column `_user_tags` varchar(180)" % self.dt)
-		webnotes.conn.begin()
+		from webnotes.model.db_schema import add_column
+		add_column(self.dt, "_user_tags", "Data")

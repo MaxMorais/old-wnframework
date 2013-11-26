@@ -161,7 +161,6 @@ div#freeze {
 /* appframe header */
 
 .appframe {
-	overflow: hidden;
 	padding-top: 15px;
 }
 
@@ -175,11 +174,16 @@ div#freeze {
 	padding-bottom: 10px;
 }
 
-.titlebar-center-item {
-	padding-top: 0px;
-	padding-bottom: 0px;
+.titlebar-item h4 {
+	width: 100%;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	margin: 0px;
 }
 
+.titlebar-center-item  {
+}
 
 .appframe-header {
 	margin-bottom: 20px;
@@ -228,6 +232,7 @@ div#freeze {
 .appframe-form input, .appframe-form select, .appframe-form label {
 	font-size: 90%;
 	padding: 4px;
+	margin: 3px 0px;
 }
 
 .appframe-form .form-group {
@@ -240,12 +245,7 @@ div#freeze {
 
 .iconbar {
 	display: inline-block;
-	padding: 9px;
-	border-right: 1px solid #c7c7c7;
-}
-
-.iconbar:last-child {
-	border-right: 0px;
+	padding: 9px 0px;
 }
 
 .iconbar ul {
@@ -260,14 +260,10 @@ div#freeze {
 	padding-right: 4px;
 }
 
-.iconbar li:last-child {
-	padding-right: 0px;
-}
-
 .iconbar i {
 	margin-top: 4px;
 	margin-right: 4px;
-	color: #444;
+	color: #888;
 	cursor: pointer;
 	font-size: 16px;
 }
@@ -372,6 +368,18 @@ div#freeze {
 	background-color: #e74c3c;
 }
 
+.comm-header {
+	font-weight: bold; 
+	height: 20px; 
+	overflow: hidden;
+}
+
+.comm-header > div {
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
+}
+
 /* alert */
 
 
@@ -465,6 +473,17 @@ textarea.form-control {
 	height: 120px;
 }
 
+ul.linked-with-list {
+	list-style: none;
+	margin: 0 0 20px 0;
+	padding: 0 0 0 0;
+}
+
+ul.linked-with-list li {
+	padding: 5px 0px;
+	border-bottom: 1px solid #c7c7c7;
+}
+
 /* form grid */
 
 .grid-heading-row {
@@ -551,3 +570,6 @@ textarea.form-control {
 .form-group {
 	margin-bottom: 7px;
 }
+
+/* hack */
+.ui-datepicker { z-index: 9999999 !important; }

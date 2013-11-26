@@ -1,4 +1,4 @@
-// Copyright (c) 2013, Web Notes Technologies Pvt. Ltd.
+// Copyright (c) 2013, Web Notes Technologies Pvt. Ltd. and Contributors
 // MIT License. See license.txt 
 
 // new re-factored Listing object
@@ -154,7 +154,8 @@ wn.ui.Listing = Class.extend({
 		// new
 		if(this.new_doctype) {
 			if(this.appframe) {
-				this.appframe.set_title_right("<i class='icon-plus'></i> New", function() { me.run(); });
+				this.appframe.set_title_right("<i class='icon-plus'></i> New", function() { 
+					(me.custom_new_doc || me.make_new_doc).apply(me, [me.new_doctype]); });
 			}
 			this.add_button(wn._('New'), function() { 
 				(me.custom_new_doc || me.make_new_doc).apply(me, [me.new_doctype]);
@@ -356,7 +357,7 @@ wn.ui.Listing = Class.extend({
 		} else {
 			// no filter for this item,
 			// setup one
-			if(fieldname==='_user_tags') {
+			if(['_user_tags', '_comments'].indexOf(fieldname)!==-1) {
 				this.filter_list.add_filter(doctype, fieldname, 
 					'like', '%' + label);
 			} else {

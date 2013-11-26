@@ -1,9 +1,7 @@
-// Copyright (c) 2013, Web Notes Technologies Pvt. Ltd.
+// Copyright (c) 2013, Web Notes Technologies Pvt. Ltd. and Contributors
 // MIT License. See license.txt
 
-wn.views.get_listview = function(doctype, parent) {
-	var meta = locals.DocType[doctype];
-	
+wn.views.get_listview = function(doctype, parent) {	
 	if(wn.doclistviews[doctype]) {
 		var listview = new wn.doclistviews[doctype](parent);
 	} else {
@@ -33,7 +31,7 @@ wn.views.ListView = Class.extend({
 		var me = this;
 		var t = "`tab"+this.doctype+"`.";
 		this.fields = [t + 'name', t + 'owner', t + 'docstatus', 
-			t + '_user_tags', t + 'modified', t + 'modified_by'];
+			t + '_user_tags', t + '_comments', t + 'modified', t + 'modified_by'];
 		this.stats = ['_user_tags'];
 		
 		// add workflow field (as priority)
@@ -138,12 +136,10 @@ wn.views.ListView = Class.extend({
 			this.id_list.push(data.name);
 		
 		
-		var body = $('<div class="doclist-row" style="display: table; width: 100%; table-layout: fixed">\
-			<div class="list-row-id-area" style="width: 200px; display: table-cell; \
-				vertical-align: middle; white-space: nowrap;\
+		var body = $('<div class="doclist-row row">\
+			<div class="list-row-id-area col-sm-3" style="white-space: nowrap;\
 				text-overflow: ellipsis; max-height: 30px"></div>\
-			<div class="list-row-content-area row" style="display: table-cell; \
-				vertical-align: middle;"></div>\
+			<div class="list-row-content-area col-sm-9"></div>\
 		</div>').appendTo($(row).css({"position":"relative"})),
 			colspans = 0,
 			me = this;
@@ -161,11 +157,29 @@ wn.views.ListView = Class.extend({
 			}
 		});
 		
+		var comments = data._comments ? JSON.parse(data._comments) : [];
+		var tags = $.map((data._user_tags || "").split(","), function(v) { return v ? v : null; });
 		
-		var timestamp = $('<div class="list-timestamp">').appendTo(row).html(comment_when(data.modified));
+		var timestamp_and_comment = 
+			$('<div class="list-timestamp">')
+				.appendTo(row)
+				.html(""
+					+ (tags.length ? (
+							'<span style="margin-right: 10px;" class="list-tag-preview">' + tags.join(", ") + '</span>'
+						): "")
+					+ (comments.length ? 
+						('<a style="margin-right: 10px;" href="#Form/'+
+							this.doctype + '/' + data.name 
+							+'" title="'+
+							comments[comments.length-1].comment
+							+'"><i class="icon-comments"></i> ' 
+							+ comments.length + " " + (
+								comments.length===1 ? wn._("comment") : wn._("comments")) + '</a>')
+						: "")
+					+ comment_when(data.modified));
 		
 		// row #2
-		var row2 = $('<div class="row tag-row">\
+		var row2 = $('<div class="row tag-row" style="margin-bottom: 5px;">\
 			<div class="col-xs-12">\
 				<div class="col-xs-3"></div>\
 				<div class="col-xs-7">\
@@ -209,7 +223,7 @@ wn.views.ListView = Class.extend({
 		return col;
 	},
 	render_avatar_and_id: function(data, parent) {
-		if(wn.model.can_delete(this.doctype) || this.settings.selectable) {
+		if((wn.model.can_delete(this.doctype) || this.settings.selectable) && !this.no_delete) {
 			$('<input class="list-delete" type="checkbox">')
 				.data('name', data.name)
 				.data('data', data)
@@ -219,7 +233,7 @@ wn.views.ListView = Class.extend({
 		
 		var $avatar = $(wn.avatar(data.modified_by, false, wn._("Modified by")+": " 
 			+ wn.user_info(data.modified_by).fullname))
-				.appendTo($(parent).css({"margin-top": "-5px"}))
+				.appendTo(parent)
 				.css({"max-width": "100%"})
 
 
