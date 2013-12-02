@@ -13,6 +13,7 @@ from MySQLdb import ProgrammingError as SQLError
 
 import os
 import json
+import semantic_version
 
 local = Local()
 
@@ -452,9 +453,9 @@ def reset_perms(doctype):
 	clear_perms(doctype)
 	reload_doc(conn.get_value("DocType", doctype, "module"), "DocType", doctype, force=True)
 
-def reload_doc(module, dt=None, dn=None, force=False):
+def reload_doc(module, dt=None, dn=None, plugin=None, force=False):
 	import webnotes.modules
-	return webnotes.modules.reload_doc(module, dt, dn, force)
+	return webnotes.modules.reload_doc(module, dt, dn, plugin=plugin, force=force)
 
 def rename_doc(doctype, old, new, debug=0, force=False, merge=False):
 	from webnotes.model.rename_doc import rename_doc
@@ -626,3 +627,11 @@ def get_conf_path(sites_dir, site):
 	from webnotes.utils import get_site_base_path
 	return os.path.join(get_site_base_path(sites_dir=sites_dir,
 			hostname=site), 'site_config.json')
+
+def validate_versions():
+	config = get_config()
+	framework_version = semantic_version.Version(config['framework_version'])
+	spec = semantic_version.Spec(config['requires_framework_version'])
+	if not spec.match(framework_version):
+		raise Exception, "Framework version out of sync"
+

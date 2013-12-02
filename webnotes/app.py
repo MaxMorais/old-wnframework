@@ -8,7 +8,7 @@ sys.path.insert(0, 'lib')
 from werkzeug.wrappers import Request, Response
 from werkzeug.local import LocalManager
 from webnotes.middlewares import StaticDataMiddleware
-from werkzeug.exceptions import HTTPException
+from werkzeug.exceptions import HTTPException, NotFound
 from werkzeug.contrib.profiler import ProfilerMiddleware
 from webnotes import get_config
 
@@ -19,6 +19,19 @@ import webnotes.auth
 import webnotes.webutils
 
 local_manager = LocalManager([webnotes.local])
+
+def handle_session_stopped():
+	res = Response("""<html>
+							<body style="background-color: #EEE;">
+									<h3 style="width: 900px; background-color: #FFF; border: 2px solid #AAA; padding: 20px; font-family: Arial; margin: 20px auto">
+											Updating.
+											We will be back in a few moments...
+									</h3>
+							</body>
+					</html>""")
+	res.status_code = 503
+	res.content_type = 'text/html'
+	return res
 
 @Request.application
 def application(request):
@@ -40,30 +53,37 @@ def application(request):
 		
 		if webnotes.form_dict.cmd:
 			webnotes.handler.handle()
-		else:
+		elif webnotes.local.request.method == 'GET':
 			webnotes.webutils.render(webnotes.request.path[1:])
+		else:
+			raise NotFound
 
 	except HTTPException, e:
 		return e
+		
+	except webnotes.SessionStopped, e:
+		webnotes.local._response = handle_session_stopped()
 		
 	finally:
 		if webnotes.conn:
 			webnotes.conn.close()
 	
-	return webnotes._response
+	return webnotes.local._response
 
 application = local_manager.make_middleware(application)
 
-
-application = StaticDataMiddleware(application, {
-	'/': 'public',
-})
-
+if not os.environ.get('NO_STATICS'):
+	application = StaticDataMiddleware(application, {
+		'/': 'public',
+	})
 
 def serve(port=8000, profile=False):
+	webnotes.validate_versions()
 	global application
 	from werkzeug.serving import run_simple
+
 	if profile:
 		application = ProfilerMiddleware(application)
+
 	run_simple('0.0.0.0', int(port), application, use_reloader=True, 
 		use_debugger=True, use_evalex=True)

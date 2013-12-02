@@ -69,9 +69,11 @@ def setup_parser():
 	parser.add_argument("-f", "--force", default=False, action="store_true",
 		help="Force execution where applicable (look for [-f] in help)")
 	parser.add_argument("--quiet", default=True, action="store_false", dest="verbose",
-		help="Show verbose output where applicable")
+		help="Don't show verbose output where applicable")
 	parser.add_argument("--site", nargs="?", metavar="SITE-NAME or all",
 		help="Run for a particular site")
+	parser.add_argument("--plugin", nargs="?", metavar="PLUGIN-NAME",
+		help="Run for a particular plugin")
 		
 	return parser.parse_args()
 	
@@ -125,8 +127,6 @@ def setup_utilities(parser):
 		help="Move site to different directory")
 	parser.add_argument("--with_files", default=False, action="store_true",
 		help="Also take backup of files")
-	parser.add_argument("--docs", default=False, action="store_true",
-		help="Build docs")
 	parser.add_argument("--domain", nargs="*",
 		help="Get or set domain in Website Settings")
 	parser.add_argument("--make_conf", nargs="*", metavar=("DB-NAME", "DB-PASSWORD"),
@@ -194,6 +194,8 @@ def setup_git(parser):
 		help="Run git checkout BRANCH for both repositories")
 	parser.add_argument("--git", nargs="*", metavar="OPTIONS",
 		help="Run git command for both repositories")
+	parser.add_argument("--bump", metavar=("REPO", "VERSION-TYPE"), nargs=2,
+		help="Bump project version")
 	
 		
 def setup_translation(parser):
@@ -334,9 +336,10 @@ def update_all_sites(remote=None, branch=None, verbose=True):
 		latest(site=site, verbose=verbose)
 
 @cmd
-def reload_doc(module, doctype, docname, site=None, force=False):
+def reload_doc(module, doctype, docname, plugin=None, site=None, force=False):
 	webnotes.connect(site=site)
-	webnotes.reload_doc(module, doctype, docname, force=force)
+	webnotes.reload_doc(module, doctype, docname, plugin=plugin, force=force)
+	webnotes.conn.commit()
 	webnotes.destroy()
 
 @cmd
@@ -385,11 +388,6 @@ def move(site=None, dest_dir=None):
 	os.rename(old_path, final_new_path)
 	webnotes.destroy()
 	return os.path.basename(final_new_path)
-
-@cmd
-def docs():
-	from core.doctype.documentation_tool.documentation_tool import write_static
-	write_static()
 
 @cmd
 def domain(host_url=None, site=None):
@@ -456,9 +454,13 @@ def reset_perms(site=None):
 # scheduler
 @cmd
 def run_scheduler(site=None):
+	from webnotes.utils.file_lock import create_lock, delete_lock
 	import webnotes.utils.scheduler
-	webnotes.connect(site=site)
-	print webnotes.utils.scheduler.execute()
+	webnotes.init(site=site)
+	if create_lock('scheduler'):
+		webnotes.connect(site=site)
+		print webnotes.utils.scheduler.execute()
+		delete_lock('scheduler')
 	webnotes.destroy()
 
 @cmd
@@ -597,7 +599,7 @@ def mysql(site=None):
 	import commands, os
 	msq = commands.getoutput('which mysql')
 	webnotes.init(site=site)
-	os.execv(msq, [msq, '-u', webnotes.conf.db_name, '-p'+webnotes.conf.db_password, webnotes.conf.db_name, '-h', webnotes.conf.db_host or "localhost"])
+	os.execv(msq, [msq, '-u', webnotes.conf.db_name, '-p'+webnotes.conf.db_password, webnotes.conf.db_name, '-h', webnotes.conf.db_host or "localhost", "-A"])
 	webnotes.destroy()
 
 @cmd
@@ -732,6 +734,70 @@ def update_site_config(site_config, site, verbose=False):
 		json.dump(webnotes.conf.site_config, f, indent=1, sort_keys=True)
 		
 	webnotes.destroy()
+
+@cmd
+def bump(repo, bump_type):
+
+	import json
+	assert repo in ['lib', 'app']
+	assert bump_type in ['minor', 'major', 'patch']
+
+	def validate(repo_path):
+		import git
+		repo = git.Repo(repo_path)
+		if repo.active_branch != 'master':
+			raise Exception, "Current branch not master in {}".format(repo_path)
+
+	def bump_version(version, version_type):
+		import semantic_version
+		v = semantic_version.Version(version)
+		if version_type == 'minor':
+			v.minor += 1
+		elif version_type == 'major':
+			v.major += 1
+		elif version_type == 'patch':
+			v.patch += 1
+		return unicode(v)
 	
+	def add_tag(repo_path, version):
+		import git
+		repo = git.Repo(repo_path)
+		repo.index.add(['config.json'])
+		repo.index.commit('bumped to version {}'.format(version))
+		repo.create_tag('v' + version, repo.head)
+	
+	def update_framework_requirement(version):
+		with open('app/config.json') as f:
+			config = json.load(f)
+		config['requires_framework_version'] = '==' + version
+		with open('app/config.json', 'w') as f:
+			json.dump(config, f, indent=1, sort_keys=True)
+
+	validate('lib/')
+	validate('app/')
+
+	if repo == 'app':
+		with open('app/config.json') as f:
+			config = json.load(f)
+		new_version = bump_version(config['app_version'], bump_type)
+		config['app_version'] = new_version
+		with open('app/config.json', 'w') as f:
+			json.dump(config, f, indent=1, sort_keys=True)
+		add_tag('app/', new_version)
+
+	elif repo == 'lib':
+		with open('lib/config.json') as f:
+			config = json.load(f)
+		new_version = bump_version(config['framework_version'], bump_type)
+		config['framework_version'] = new_version
+		with open('lib/config.json', 'w') as f:
+			json.dump(config, f, indent=1, sort_keys=True)
+		add_tag('lib/', new_version)
+
+		update_framework_requirement(new_version)
+
+		bump('app', bump_type)
+		
+
 if __name__=="__main__":
 	main()
