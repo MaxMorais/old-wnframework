@@ -1,0 +1,94 @@
+<html>
+<head>
+<title>voucher-table</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+</head>
+<body leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
+<!-- Save for Web Slices (voucher-table.psd) -->
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <th width="100%" align="center" valign="top" scope="col"><table width="800" border="0" cellspacing="0" cellpadding="0">
+      <tr>
+        <th scope="col">&nbsp;</th>
+      </tr>
+    </table>
+      <table width="800" border="0" cellspacing="0" cellpadding="0"  style="border: 1px solid; border-color: #000000;">
+      <tr>
+        <th width="100%" align="left" scope="col"><img src="http://realizemodulados.com.br/img/logo.png" width="177" height="70" alt="" style="margin: 10px;"></th>
+      </tr>
+    </table></th>
+  </tr>
+  <tr>
+    <th align="center" valign="top" scope="col"><table width="800" border="0" cellspacing="0" cellpadding="0">
+      <tr>
+        <th scope="col">&nbsp;</th>
+      </tr>
+    </table>
+      <table width="800" border="0" cellspacing="0" cellpadding="0" style="border: 1px solid; border-color: #000000; font: Arial black; color: #FF0000; text-align: center; font-family: Arial, Helvetica, sans-serif; font-size: 20px;">
+      <tr>
+        <th width="100%" scope="col">&nbsp;</th>
+      </tr>
+      <tr>
+        <th width="100%" scope="col"><h2>Ol&aacute;, {{ name }} </h2>
+          <p>Obrigado por se cadastrar na Promo&ccedil;&atilde;o IPVA 2014.<br/>
+            &Eacute; obrigat&oacute;rio a impress&atilde;o deste cupom,<br/>
+            o qual tem v&aacute;lidade para as compras efetuadas at&eacute; o dia 
+          <h2>15/01/2014</h2>
+          O seu atendimento foi agendado para a unidade: {{ territory }}
+          </p>
+          <h3>Unidade: {{ territory }}</h3>
+          <div>Endere&ccedil;o: {{ tinfo.get('Address Line 1')}} - {{ tinfo.get('Address Line 2') }} - {{ tinfo.get('City') }}.<br/>
+            Telefone: {% for phone in tinfo.get('Phones', []) %} {{ phone }} {% endfor %}
+            <br/>
+        </th>
+      </tr>
+    </table>
+      <table width="800" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+          <th scope="col">&nbsp;</th>
+        </tr>
+    </table></th>
+  </tr>
+  <tr>
+    <th width="100%" align="center" valign="top" scope="col"><table id="Table_01" width="800" height="534" border="0" cellpadding="0" cellspacing="0">
+      <tr>
+        <td><img src="http://www.realizemodulados.com.br/img/ipva/cupom-ipva_01.jpg" width="800" height="84" alt=""></td>
+      </tr>
+      <tr>
+        <td height="208" background="http://www.realizemodulados.com.br/img/ipva/cupom-ipva_02.jpg"><table width="800" height="208" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+              <th scope="col"><table width="100%" height="208" border="0" cellspacing="0" cellpadding="0">
+                  <tr>
+                    <th width="140" height="25%" scope="col">&nbsp;</th>
+                    <th align="left" scope="col"  style="font: arial black; color: #FE0000; text-align: left; font-family: Arial, Helvetica, sans-serif; font-size: 18px;">{{ name }}</th>
+                  </tr>
+                  <tr>
+                    <td width="140" height="25%">&nbsp;</td>
+                    <td align="left" valign="middle" style="font: arial black; color: #FE0000; text-align: left; font-family: Arial, Helvetica, sans-serif; font-size: 18px;"> {{ phone }} </td>
+                  </tr>
+                  <tr>
+                    <td width="140" height="49">&nbsp;</td>
+                    <td align="left" valign="middle" style="font: arial black; color: #FE0000; text-align: left; font-family: Arial, Helvetica, sans-serif; font-size: 18px;">{{ email }}</td>
+                  </tr>
+                  <tr>
+                    <td width="140" height="25%">&nbsp;</td>
+                    <td align="left" valign="middle" style="font: arial black; color: #FE0000; text-align: left; font-family: Arial, Helvetica, sans-serif; font-size: 18px;"><p>{{ territory }}</p></td>
+                  </tr>
+              </table></th>
+            </tr>
+        </table></td>
+      </tr>
+      <tr>
+        <td><img src="http://www.realizemodulados.com.br/img/ipva/cupom-ipva_03.jpg" width="800" height="242" alt=""></td>
+      </tr>
+    </table>
+    <table width="800" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+          <th scope="col">&nbsp;</th>
+        </tr>
+    </table></th>
+  </tr>
+</table>
+<!-- End Save for Web Slices -->
+</body>
+</html>
