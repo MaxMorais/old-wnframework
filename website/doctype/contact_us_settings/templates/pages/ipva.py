@@ -126,7 +126,7 @@ def get_message(**args):
 	return template
 
 def create_subscription(args):
-	d = webnotes.new_bean('Campaing Subscriber')
+	d = webnotes.new_bean('Campaign Subscriber')
 	d.doc.fields.update({
 		'subscriber_name': args.get('name'),
 		'phone': args.get('phone'),
